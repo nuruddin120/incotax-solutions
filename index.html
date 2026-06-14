@@ -1,688 +1,1399 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IncoTax Solutions — Cloud Accounting & Income Tax Experts</title>
-  <meta name="description" content="IncoTax Solutions delivers expert cloud accounting (QuickBooks Online & Xero) and income tax services for small businesses, freelancers, and individuals. Remote, accurate, stress-free." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Income Tax Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:  #0b3d2e;
+    --navy:   #1a2f42;
+    --ink:    #1c2420;
+    --muted:  #6b7a71;
+    --line:   #e3e8e4;
+    --bg:     #ffffff;
+    --surface:#f7f9f7;
+    --error:  #b3322e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Hind Siliguri',sans-serif;
+    background:var(--surface);
+    color:var(--ink);
+    line-height:1.6;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .wrap {
+    width:100%;
+    max-width:620px;
+    margin:0 auto;
+    padding:48px 20px 40px;
+    flex:1;
+  }
 
-  <!-- Inter font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  /* ── Header ─────────────────────────── */
+  header { margin-bottom:32px; }
+  header h1 { font-size:21px; font-weight:700; line-height:1.4; }
+  header p  { color:var(--muted); font-size:14px; margin-top:4px; }
+  .tax-year {
+    display:inline-block;
+    margin-top:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.07em;
+    background:#e8f0eb;
+    color:var(--green);
+    border-radius:4px;
+    padding:2px 8px;
+    font-weight:600;
+  }
 
-  <!-- Compiled Tailwind CSS (self-contained, no CDN needed) -->
-  <style>
-*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Inter,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.-bottom-5{bottom:-1.25rem}.-left-5{left:-1.25rem}.-right-24{right:-6rem}.-top-24{top:-6rem}.top-0{top:0}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1\.5{margin-bottom:.375rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-12{margin-top:3rem}.mt-14{margin-top:3.5rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-7{margin-top:1.75rem}.mt-8{margin-top:2rem}.mt-9{margin-top:2.25rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-11{height:2.75rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-28{height:7rem}.h-3{height:.75rem}.h-3\.5{height:.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-96{height:24rem}.w-10{width:2.5rem}.w-11{width:2.75rem}.w-12{width:3rem}.w-14{width:3.5rem}.w-3{width:.75rem}.w-3\.5{width:.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-96{width:24rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-7xl{max-width:80rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.resize-none{resize:none}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-10{gap:2.5rem}.gap-12{gap:3rem}.gap-14{gap:3.5rem}.gap-2{gap:.5rem}.gap-2\.5{gap:.625rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem*var(--tw-space-y-reverse))}.space-y-6>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem*var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.scroll-smooth{scroll-behavior:smooth}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.rounded-t-md{border-top-left-radius:.375rem;border-top-right-radius:.375rem}.border{border-width:1px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-t{border-top-width:1px}.border-teal\/20{border-color:rgba(13,148,136,.2)}.border-teal\/30{border-color:rgba(13,148,136,.3)}.border-white\/10{border-color:hsla(0,0%,100%,.1)}.border-white\/15{border-color:hsla(0,0%,100%,.15)}.border-white\/20{border-color:hsla(0,0%,100%,.2)}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36/var(--tw-bg-opacity,1))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(74 222 128/var(--tw-bg-opacity,1))}.bg-navy{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-red-400{--tw-bg-opacity:1;background-color:rgb(248 113 113/var(--tw-bg-opacity,1))}.bg-teal{--tw-bg-opacity:1;background-color:rgb(13 148 136/var(--tw-bg-opacity,1))}.bg-teal\/10{background-color:rgba(13,148,136,.1)}.bg-teal\/20{background-color:rgba(13,148,136,.2)}.bg-teal\/40{background-color:rgba(13,148,136,.4)}.bg-teal\/70{background-color:rgba(13,148,136,.7)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/10{background-color:hsla(0,0%,100%,.1)}.bg-white\/5{background-color:hsla(0,0%,100%,.05)}.bg-white\/90{background-color:hsla(0,0%,100%,.9)}.fill-current{fill:currentColor}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-7{padding:1.75rem}.p-8{padding:2rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-7{padding-left:1.75rem;padding-right:1.75rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-14{padding-top:3.5rem;padding-bottom:3.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-bottom:2rem}.pt-8,.py-8{padding-top:2rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-\[1\.1\]{line-height:1.1}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-.025em}.tracking-wide{letter-spacing:.025em}.tracking-wider{letter-spacing:.05em}.text-navy{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-slate{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-teal{--tw-text-opacity:1;color:rgb(13 148 136/var(--tw-text-opacity,1))}.text-teal-dark{--tw-text-opacity:1;color:rgb(11 124 114/var(--tw-text-opacity,1))}.text-teal-light{--tw-text-opacity:1;color:rgb(20 184 166/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-40{opacity:.4}.opacity-60{opacity:.6}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-2xl,.shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-sm,.shadow-xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color)}.shadow-black\/40{--tw-shadow-color:rgba(0,0,0,.4);--tw-shadow:var(--tw-shadow-colored)}.shadow-teal\/20{--tw-shadow-color:rgba(13,148,136,.2);--tw-shadow:var(--tw-shadow-colored)}.blur-3xl{--tw-blur:blur(64px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:border-teal\/40:hover{border-color:rgba(13,148,136,.4)}.hover\:bg-teal:hover{--tw-bg-opacity:1;background-color:rgb(13 148 136/var(--tw-bg-opacity,1))}.hover\:bg-teal-dark:hover{--tw-bg-opacity:1;background-color:rgb(11 124 114/var(--tw-bg-opacity,1))}.hover\:bg-white\/10:hover{background-color:hsla(0,0%,100%,.1)}.hover\:text-navy:hover{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.hover\:text-teal:hover{--tw-text-opacity:1;color:rgb(13 148 136/var(--tw-text-opacity,1))}.hover\:text-teal-dark:hover{--tw-text-opacity:1;color:rgb(11 124 114/var(--tw-text-opacity,1))}.hover\:text-teal-light:hover{--tw-text-opacity:1;color:rgb(20 184 166/var(--tw-text-opacity,1))}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.focus\:border-teal:focus{--tw-border-opacity:1;border-color:rgb(13 148 136/var(--tw-border-opacity,1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-teal:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(13 148 136/var(--tw-ring-opacity,1))}.group:hover .group-hover\:bg-teal{--tw-bg-opacity:1;background-color:rgb(13 148 136/var(--tw-bg-opacity,1))}.group:hover .group-hover\:text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:flex{display:flex}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:p-9{padding:2.25rem}.sm\:px-8{padding-left:2rem;padding-right:2rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}}@media (min-width:768px){.md\:col-span-1{grid-column:span 1/span 1}.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:justify-start{justify-content:flex-start}}@media (min-width:1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:py-28{padding-top:7rem;padding-bottom:7rem}.lg\:text-6xl{font-size:3.75rem;line-height:1}}
-  </style>
+  /* ── Cards ──────────────────────────── */
+  .card {
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:14px;
+  }
+  .section-label {
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:12px;
+  }
 
-  <style>
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; }
-    /* Subtle reveal on scroll */
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .reveal { opacity: 1; transform: none; transition: none; }
-    }
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-  </style>
+  /* ── Month grid ─────────────────────── */
+  .months-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  @media(min-width:440px){ .months-grid{ grid-template-columns:1fr 1fr 1fr; } }
+  .month-field { display:flex; flex-direction:column; gap:4px; }
+  .month-field label { font-size:12px; font-weight:600; color:var(--muted); }
+  .month-field label .fiscal { color:var(--green); font-size:10px; margin-left:3px; }
+  .mini-wrap { position:relative; }
+  .mini-wrap .tk { position:absolute; left:9px; top:50%; transform:translateY(-50%);
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); pointer-events:none; }
+  .month-field input {
+    width:100%; padding:9px 6px 9px 24px;
+    border:1px solid var(--line); border-radius:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink); background:var(--bg);
+    transition:border-color .15s;
+  }
+  .month-field input:focus { outline:none; border-color:var(--green); }
+  .month-field input.invalid { border-color:var(--error); }
+
+  /* ── Bonus / general fields ─────────── */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media(max-width:400px){ .two-col{ grid-template-columns:1fr; } }
+  .field label { display:block; font-size:12.5px; font-weight:600; color:var(--muted); margin-bottom:5px; }
+  .iw { position:relative; }
+  .iw .tk { position:absolute; left:10px; top:50%; transform:translateY(-50%);
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); pointer-events:none; }
+  .field input[type=number] {
+    width:100%; padding:10px 10px 10px 28px;
+    border:1px solid var(--line); border-radius:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--ink); background:var(--bg);
+    transition:border-color .15s;
+  }
+  .field input[type=number]:focus { outline:none; border-color:var(--green); }
+  .field input.invalid { border-color:var(--error); }
+  .field .err { display:none; color:var(--error); font-size:12px; margin-top:3px; }
+  .field.has-error .err { display:block; }
+
+  /* ── Select ─────────────────────────── */
+  .field select {
+    width:100%; padding:10px 36px 10px 12px;
+    border:1px solid var(--line); border-radius:8px;
+    font-family:'Hind Siliguri',sans-serif; font-size:14px; color:var(--ink); background:var(--bg);
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7a71' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 10px center;
+    cursor:pointer; transition:border-color .15s;
+  }
+  .field select:focus { outline:none; border-color:var(--green); }
+
+  /* ── Checkbox ───────────────────────── */
+  .check-row { display:flex; align-items:center; gap:8px; margin-top:14px; }
+  .check-row input[type=checkbox] { width:16px; height:16px; accent-color:var(--green); cursor:pointer; flex-shrink:0; }
+  .check-row label { font-size:13.5px; color:var(--ink); cursor:pointer; }
+  .check-row label small { color:var(--muted); font-weight:400; }
+
+  /* ── Reset ──────────────────────────── */
+  .reset-row { margin-bottom:6px; text-align:right; }
+  button.reset {
+    border:none; background:none; color:var(--muted);
+    font-family:'Hind Siliguri',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; padding:4px 0; border-bottom:1px solid transparent;
+  }
+  button.reset:hover { color:var(--error); border-bottom-color:var(--error); }
+
+  /* ── Result rows ────────────────────── */
+  .result-block { margin-bottom:8px; }
+  .result-block .block-title {
+    font-size:11.5px; font-weight:700; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--muted);
+    padding:14px 0 6px; border-top:2px solid var(--line); margin-top:16px;
+  }
+  .result-block:first-child .block-title { border-top:none; margin-top:0; }
+  .row {
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap:16px; padding:11px 0; border-bottom:1px solid var(--line);
+  }
+  .row .name { font-size:14px; color:var(--muted); }
+  .row .value { font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:15px; white-space:nowrap; }
+  .row .deduct { color:var(--error); }
+
+  /* ── Final boxes ────────────────────── */
+  .final-box {
+    padding:22px; border-radius:12px; color:#fff; margin-top:16px;
+  }
+  .final-box.green { background:var(--green); }
+  .final-box.navy  { background:var(--navy); }
+  .final-box .flabel {
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700;
+  }
+  .final-box.green .flabel { color:#a9c7b4; }
+  .final-box.navy  .flabel { color:#7fa8c0; }
+  .final-box .famount {
+    font-family:'IBM Plex Mono',monospace;
+    font-size:clamp(24px,6vw,32px); font-weight:600; margin:4px 0 8px;
+    color:#f7d489;
+  }
+  .final-box .fmsg { font-size:13.5px; }
+  .final-box.green .fmsg { color:#d4e4da; }
+  .final-box.navy  .fmsg { color:#a8c8d8; }
+  .final-box .fmsg strong { color:#fff; }
+
+  /* ── Slab table ─────────────────────── */
+  .slab-wrap {
+    background:var(--bg); border:1px solid var(--line);
+    border-radius:12px; overflow:hidden; margin-bottom:0; overflow-x:auto;
+  }
+  table.slab { width:100%; border-collapse:collapse; font-size:13px; min-width:340px; }
+  table.slab thead th {
+    background:#f4f7f5; font-size:11px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--muted); padding:9px 14px;
+    border-bottom:1px solid var(--line); text-align:left; white-space:nowrap;
+  }
+  table.slab thead th:not(:first-child) { text-align:right; }
+  table.slab tbody td {
+    padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:middle;
+  }
+  table.slab tbody td:not(:first-child) { text-align:right; }
+  table.slab tbody tr:last-child td { border-bottom:none; }
+  table.slab .rate-col { font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:500; }
+  table.slab .zero    { color:var(--muted); }
+  table.slab .tax-col { font-family:'IBM Plex Mono',monospace; font-weight:600; }
+  table.slab .amt-col { font-family:'IBM Plex Mono',monospace; font-size:12.5px; }
+
+  /* ── Investment options table ───────── */
+  .options { margin-top:32px; }
+  .options h2 { font-size:15px; font-weight:700; margin-bottom:3px; }
+  .options .sub { font-size:13px; color:var(--muted); margin-bottom:12px; }
+  .options table { width:100%; border-collapse:collapse; font-size:13px; }
+  .options th {
+    text-align:left; font-size:11px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--muted); padding:8px 8px 8px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .options th:last-child,.options td:last-child { text-align:right; padding-right:0; white-space:nowrap; }
+  .options td { padding:10px 8px 10px 0; border-bottom:1px solid var(--line); vertical-align:top; }
+  .options td.lim { font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--green); font-weight:500; }
+  .options td ul { margin:4px 0 0 16px; color:var(--muted); font-size:12px; }
+  .options td ul li { margin:1px 0; }
+
+  /* ── Footer ─────────────────────────── */
+  footer { border-top:1px solid var(--line); padding:22px 20px 30px; }
+  .footer-inner { max-width:620px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  .f-name { font-weight:700; font-size:15px; }
+  .f-role { display:block; font-size:12.5px; color:var(--muted); }
+  .wa-link {
+    display:inline-flex; align-items:center; gap:8px;
+    text-decoration:none; color:var(--green);
+    font-family:'IBM Plex Mono',monospace; font-size:13.5px; font-weight:600;
+    padding:8px 14px; border:1px solid var(--line); border-radius:999px;
+    transition:border-color .15s,background .15s;
+  }
+  .wa-link:hover { border-color:#25d366; background:#f2fbf5; }
+  .wa-link svg { width:18px; height:18px; color:#25d366; flex-shrink:0; }
+  @media(max-width:480px){
+    .wa-link .wa-num { display:none; }
+    .wa-link { padding:10px; }
+  }
+  .field input[type=text] {
+    width:100%; padding:10px 12px;
+    border:1px solid var(--line); border-radius:8px;
+    font-family:'Hind Siliguri',sans-serif; font-size:14.5px;
+    color:var(--ink); background:var(--bg); transition:border-color .15s;
+  }
+  .field input[type=text]:focus { outline:none; border-color:var(--green); }
+
+  /* ── Existing investments ───────────── */
+  .invest-item {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:10px 0; border-bottom:1px solid var(--line); gap:8px;
+  }
+  .inv-name { font-size:13.5px; font-weight:600; }
+  .inv-sub  { font-size:11.5px; color:var(--muted); margin-top:1px; }
+  .inv-cap  { font-size:11px; color:#b06000; margin-top:2px; }
+  .inv-allowable { font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; white-space:nowrap; }
+  .inv-del  { border:none; background:none; color:var(--error); font-size:20px; cursor:pointer; padding:0 4px; line-height:1; flex-shrink:0; }
+  .invest-total-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0 0; margin-top:4px; border-top:1px solid var(--line); }
+  button.add-btn {
+    display:none; width:100%; margin-top:10px; padding:10px;
+    background:var(--green); color:#fff; border:none; border-radius:8px;
+    font-family:'Hind Siliguri',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; transition:opacity .15s;
+  }
+  button.add-btn:hover { opacity:.87; }
+
+  /* ── Print / PDF button ─────────────── */
+  .print-btn {
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; margin-top:20px; padding:13px;
+    background:var(--green); color:#fff; border:none; border-radius:10px;
+    font-family:'Hind Siliguri',sans-serif; font-size:15px; font-weight:700;
+    cursor:pointer; transition:opacity .15s;
+  }
+  .print-btn:hover { opacity:.87; }
+  .print-btn svg { width:18px; height:18px; flex-shrink:0; }
+
+  /* ── Print area (hidden on screen) ─── */
+  #printArea { display:none; }
+
+  @media(prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+
+</style>
 </head>
+<body>
+<div class="wrap">
 
-<body class="bg-white text-slate antialiased">
-
-  <!-- ============ NAVBAR ============ -->
-  <header id="navbar" class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
-    <nav class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-18 py-4">
-      <!-- Logo -->
-      <a href="#home" class="flex items-center gap-2.5 group">
-        <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-navy text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-light" aria-hidden="true"><path d="M10 18v-7" />
-  <path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />
-  <path d="M14 18v-7" />
-  <path d="M18 18v-7" />
-  <path d="M3 22h18" />
-  <path d="M6 18v-7" /></svg>
-        </span>
-        <span class="text-xl font-extrabold text-navy tracking-tight">Inc<span style="display:inline-flex;align-items:center;justify-content:center;width:0.8em;height:0.8em;border:0.1em solid #DC2626;border-radius:9999px;vertical-align:0.04em;line-height:1;box-sizing:border-box;"><span style="color:#DC2626;font-size:0.58em;font-weight:700;line-height:1;">&#x09F3;</span></span>Tax <span class="text-teal">Solutions</span></span>
-      </a>
-
-      <!-- Desktop links -->
-      <div class="hidden md:flex items-center gap-8">
-        <a href="#services" class="text-sm font-semibold text-slate hover:text-navy transition-colors">Services</a>
-        <a href="#about" class="text-sm font-semibold text-slate hover:text-navy transition-colors">About</a>
-        <a href="#process" class="text-sm font-semibold text-slate hover:text-navy transition-colors">Process</a>
-        <a href="#testimonials" class="text-sm font-semibold text-slate hover:text-navy transition-colors">Testimonials</a>
-        <a href="#contact" class="inline-flex items-center gap-2 rounded-lg bg-teal hover:bg-teal-dark text-white text-sm font-semibold px-5 py-2.5 transition-colors shadow-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M8 2v4" />
-  <path d="M16 2v4" />
-  <rect width="18" height="18" x="3" y="4" rx="2" />
-  <path d="M3 10h18" />
-  <path d="m9 16 2 2 4-4" /></svg>
-          Book a Consultation
-        </a>
-      </div>
-
-      <!-- Mobile toggle -->
-      <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-navy hover:bg-slate-100 transition-colors">
-        <svg id="menu-open-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M4 5h16" />
-  <path d="M4 12h16" />
-  <path d="M4 19h16" /></svg>
-        <svg id="menu-close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 hidden" aria-hidden="true"><path d="M18 6 6 18" />
-  <path d="m6 6 12 12" /></svg>
-      </button>
-    </nav>
-
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white">
-      <div class="px-5 py-4 flex flex-col gap-1">
-        <a href="#services" class="mobile-link rounded-lg px-3 py-3 text-sm font-semibold text-slate hover:bg-slate-100 hover:text-navy transition-colors">Services</a>
-        <a href="#about" class="mobile-link rounded-lg px-3 py-3 text-sm font-semibold text-slate hover:bg-slate-100 hover:text-navy transition-colors">About</a>
-        <a href="#process" class="mobile-link rounded-lg px-3 py-3 text-sm font-semibold text-slate hover:bg-slate-100 hover:text-navy transition-colors">Process</a>
-        <a href="#testimonials" class="mobile-link rounded-lg px-3 py-3 text-sm font-semibold text-slate hover:bg-slate-100 hover:text-navy transition-colors">Testimonials</a>
-        <a href="#contact" class="mobile-link mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-teal hover:bg-teal-dark text-white text-sm font-semibold px-5 py-3 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M8 2v4" />
-  <path d="M16 2v4" />
-  <rect width="18" height="18" x="3" y="4" rx="2" />
-  <path d="M3 10h18" />
-  <path d="m9 16 2 2 4-4" /></svg>
-          Book a Consultation
-        </a>
-      </div>
-    </div>
+  <header>
+    <h1>ইনকাম ট্যাক্স ক্যালকুলেটর</h1>
+    <p>মাসিক বেতন ও বোনাস দিন — বিনিয়োগ লক্ষ্য ও প্রদেয় কর জেনে নিন।</p>
+    <span class="tax-year">করবর্ষ: ২০২৬-২৭ এবং ২০২৭-২৮</span>
   </header>
 
-  <!-- ============ HERO ============ -->
-  <section id="home" class="relative bg-navy text-white overflow-hidden">
-    <div class="absolute inset-0 grid-bg opacity-60"></div>
-    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-teal/20 blur-3xl"></div>
-    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 py-20 lg:py-28 grid lg:grid-cols-2 gap-14 items-center">
-      <!-- Copy -->
-      <div class="reveal">
-        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-4 py-1.5 text-xs font-semibold text-teal-light tracking-wide">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg>
-          Remote · Cloud-Based · Always On
-        </span>
-        <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
-          Streamline your finances. <span class="text-teal-light">Master your taxes.</span>
-        </h1>
-        <p class="mt-6 text-lg text-slate-300 leading-relaxed max-w-xl">
-          IncoTax Solutions pairs certified <strong class="text-white font-semibold">QuickBooks Online & Xero</strong> cloud accounting with comprehensive <strong class="text-white font-semibold">income tax</strong> preparation and planning — so your books stay clean and tax season stays calm.
-        </p>
-        <div class="mt-9 flex flex-col sm:flex-row gap-4">
-          <a href="#services" class="inline-flex items-center justify-center gap-2 rounded-lg bg-teal hover:bg-teal-dark text-white font-semibold px-7 py-3.5 transition-colors shadow-lg shadow-teal/20">
-            Our Services
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"><path d="M5 12h14" />
-  <path d="m12 5 7 7-7 7" /></svg>
-          </a>
-          <a href="tel:+8801346808902" onclick="return confirm('You\u2019re about to call IncoTax Solutions at +880 1346 808902. Do you want to continue?');" class="inline-flex items-center justify-center gap-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/20 text-white font-semibold px-7 py-3.5 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-light" aria-hidden="true"><path d="M13 2a9 9 0 0 1 9 9" />
-  <path d="M13 6a5 5 0 0 1 5 5" />
-  <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></svg>
-            Schedule Free Call
-          </a>
-        </div>
-        <div class="mt-8 flex items-center gap-6 text-sm text-slate-400">
-          <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-light" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-  <path d="m9 12 2 2 4-4" /></svg> 100% compliant filing</span>
-          <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-light" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-  <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg> Bank-level security</span>
-        </div>
-      </div>
+  <!-- Card 1: Monthly salaries -->
+  <div class="card">
+    <div class="section-label">মাসিক বেতন — জুলাই থেকে জুন</div>
+    <div class="months-grid" id="monthsGrid"></div>
+  </div>
 
-      <!-- Visual mockup -->
-      <div class="reveal">
-        <div class="relative">
-          <!-- Dashboard card -->
-          <div class="rounded-2xl bg-white text-navy shadow-2xl shadow-black/40 border border-white/10 overflow-hidden">
-            <div class="flex items-center justify-between px-5 py-3 bg-slate-50 border-b border-slate-200">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-red-400"></span>
-                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-                <span class="w-3 h-3 rounded-full bg-green-400"></span>
-              </div>
-              <span class="text-xs font-semibold text-slate flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1" />
-  <rect width="7" height="5" x="14" y="3" rx="1" />
-  <rect width="7" height="9" x="14" y="12" rx="1" />
-  <rect width="7" height="5" x="3" y="16" rx="1" /></svg> Financial Dashboard</span>
-            </div>
-            <div class="p-5 space-y-5">
-              <div class="grid grid-cols-2 gap-4">
-                <div class="rounded-xl bg-navy text-white p-4">
-                  <p class="text-xs text-slate-300">Net Profit (YTD)</p>
-                  <p class="text-2xl font-extrabold mt-1">$184,920</p>
-                  <p class="text-xs text-teal-light font-semibold mt-1 flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5" aria-hidden="true"><path d="M16 7h6v6" />
-  <path d="m22 7-8.5 8.5-5-5L2 17" /></svg> +12.4%</p>
-                </div>
-                <div class="rounded-xl bg-teal/10 border border-teal/20 p-4">
-                  <p class="text-xs text-slate">Reconciled</p>
-                  <p class="text-2xl font-extrabold text-teal mt-1">100%</p>
-                  <p class="text-xs text-slate font-medium mt-1 flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-teal" aria-hidden="true"><circle cx="12" cy="12" r="10" />
-  <path d="m9 12 2 2 4-4" /></svg> Up to date</p>
-                </div>
-              </div>
-              <!-- Chart bars -->
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <p class="text-sm font-semibold text-navy">Monthly Cash Flow</p>
-                  <span class="text-xs text-slate">Last 6 months</span>
-                </div>
-                <div class="flex items-end gap-3 h-28">
-                  <div class="flex-1 bg-slate-200 rounded-t-md" style="height:45%"></div>
-                  <div class="flex-1 bg-slate-200 rounded-t-md" style="height:60%"></div>
-                  <div class="flex-1 bg-slate-300 rounded-t-md" style="height:52%"></div>
-                  <div class="flex-1 bg-teal/40 rounded-t-md" style="height:74%"></div>
-                  <div class="flex-1 bg-teal/70 rounded-t-md" style="height:85%"></div>
-                  <div class="flex-1 bg-teal rounded-t-md" style="height:96%"></div>
-                </div>
-              </div>
-              <div class="flex items-center justify-between rounded-xl bg-slate-50 border border-slate-200 px-4 py-3">
-                <span class="text-sm font-medium text-navy flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal" aria-hidden="true"><path d="M10.5 22H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v6" />
-  <path d="M14 2v5a1 1 0 0 0 1 1h5" />
-  <path d="m14 20 2 2 4-4" /></svg> Tax estimate ready</span>
-                <span class="text-xs font-semibold text-teal">Reviewed ✓</span>
-              </div>
-            </div>
-          </div>
-          <!-- Floating badges -->
-          <div class="absolute -bottom-5 -left-5 hidden sm:flex items-center gap-2 rounded-xl bg-white shadow-xl border border-slate-200 px-4 py-3">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-teal" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-  <path d="m9 12 2 2 4-4" /></svg>
-            <div class="leading-tight">
-              <p class="text-xs text-slate">Certified</p>
-              <p class="text-sm font-bold text-navy">ProAdvisor</p>
-            </div>
-          </div>
+  <!-- Card 2: Bonuses -->
+  <div class="card">
+    <div class="section-label">বোনাস ও অতিরিক্ত আয় (বাৎসরিক)</div>
+    <div class="two-col">
+      <div class="field" id="f-festival">
+        <label for="festival">উৎসব বোনাস</label>
+        <div class="iw"><span class="tk">৳</span>
+          <input type="number" id="festival" inputmode="numeric" min="0" placeholder="0">
+        </div>
+        <div class="err">ঋণাত্মক মান দেওয়া যাবে না।</div>
+      </div>
+      <div class="field" id="f-other">
+        <label for="other">অন্যান্য বোনাস / আয়</label>
+        <div class="iw"><span class="tk">৳</span>
+          <input type="number" id="other" inputmode="numeric" min="0" placeholder="0">
+        </div>
+        <div class="err">ঋণাত্মক মান দেওয়া যাবে না।</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Taxpayer info -->
+  <div class="card">
+    <div class="section-label">করদাতার তথ্য</div>
+    <div class="field" style="margin-bottom:14px">
+      <label for="taxpayerName">করদাতার নাম <span style="font-weight:400;color:var(--muted)">(PDF-এ দেখাবে)</span></label>
+      <input type="text" id="taxpayerName" placeholder="e.g. Mohammad Rahman (English only)">
+      <div style="font-size:11.5px;color:var(--muted);margin-top:4px">⚠️ অবশ্যই ইংরেজিতে লিখুন — বাংলায় লিখলে PDF-এ ভাঙা দেখাবে।</div>
+    </div>
+    <div class="field">
+      <label for="category">করদাতার ধরন</label>
+      <select id="category">
+        <option value="375000">সাধারণ পুরুষ — করমুক্ত সীমা ৩,৭৫,০০০ টাকা</option>
+        <option value="425000">মহিলা / ৬৫ বছর বা তার বেশি বয়সী — ৪,২৫,০০০ টাকা</option>
+        <option value="500000">তৃতীয় লিঙ্গ / প্রতিবন্ধী — ৫,০০,০০০ টাকা</option>
+        <option value="525000">গেজেটেড মুক্তিযোদ্ধা / জুলাই যোদ্ধা — ৫,২৫,০০০ টাকা</option>
+      </select>
+    </div>
+    <div class="two-col" style="margin-top:12px">
+      <div class="field">
+        <label for="disabledKids">প্রতিবন্ধী সন্তান/পোষ্যের সংখ্যা <span style="font-weight:400;color:var(--muted)">(প্রতিজনে +৫০,০০০)</span></label>
+        <div class="iw">
+          <input type="number" id="disabledKids" inputmode="numeric" min="0" max="20" placeholder="0" style="padding-left:12px">
         </div>
       </div>
+      <div class="field" id="f-tds">
+        <label for="tds">মোট TDS (কোম্পানি কর্তৃক কর্তিত)</label>
+        <div class="iw"><span class="tk">৳</span>
+          <input type="number" id="tds" inputmode="numeric" min="0" placeholder="0">
+        </div>
+        <div class="err">ঋণাত্মক মান দেওয়া যাবে না।</div>
+      </div>
+    </div>
+    <div class="check-row" style="margin-top:12px">
+      <input type="checkbox" id="newTaxpayer">
+      <label for="newTaxpayer">নতুন করদাতা <small>(নূন্যতম কর ৳১,০০০)</small></label>
+    </div>
+  </div>
+
+  <!-- Card: Existing investments -->
+  <div class="card">
+    <div class="section-label">বিদ্যমান বিনিয়োগ <span style="font-weight:400;color:var(--muted)">(যদি থাকে)</span></div>
+
+    <div class="field">
+      <label for="investType">বিনিয়োগের ধরন</label>
+      <select id="investType" onchange="handleInvestTypeChange()">
+        <option value="">-- ধরন বেছে নিন --</option>
+        <option value="insurance">জীবন বীমা প্রিমিয়াম</option>
+        <option value="provident">স্বীকৃত প্রভিডেন্ট ফান্ড</option>
+        <option value="superannuation">সুপারঅ্যানুয়েশন ফান্ড</option>
+        <option value="govt_sec">সরকারি সিকিউরিটিজ (সঞ্চয়পত্র, বন্ড ইত্যাদি) — সীমা ৳৫,০০,০০০</option>
+        <option value="mutual">মিউচুয়াল ফান্ড / ইউনিট সার্টিফিকেট / ETF — সীমা ৳৫,০০,০০০</option>
+        <option value="dps">ডিপিএস / মাসিক সঞ্চয় স্কিম — সীমা ৳১,২০,০০০</option>
+        <option value="bsec">BSEC তালিকাভুক্ত সিকিউরিটিজ</option>
+        <option value="hospital">দাতব্য হাসপাতালে দান (NBR অনুমোদিত)</option>
+        <option value="disabled">প্রতিবন্ধী কল্যাণ সংস্থায় দান</option>
+        <option value="zakat">যাকাত ফান্ড</option>
+        <option value="benevolent">বেনেভোলেন্ট ফান্ড / গ্রুপ ইনস্যুরেন্স</option>
+        <option value="education">শিক্ষা/উন্নয়নে বোর্ড অনুমোদিত প্রতিষ্ঠান</option>
+        <option value="liberation">মুক্তিযুদ্ধ জাদুঘর</option>
+      </select>
+    </div>
+
+    <!-- Insurance: two fields -->
+    <div id="insuranceFields" style="display:none" class="two-col">
+      <div class="field">
+        <label for="investPremium">মোট প্রিমিয়াম প্রদত্ত</label>
+        <div class="iw"><span class="tk">৳</span>
+          <input type="number" id="investPremium" inputmode="numeric" min="0" placeholder="0">
+        </div>
+      </div>
+      <div class="field">
+        <label for="investPolicy">পলিসি মূল্য (Policy Value)</label>
+        <div class="iw"><span class="tk">৳</span>
+          <input type="number" id="investPolicy" inputmode="numeric" min="0" placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard amount -->
+    <div id="standardInvestField" style="display:none" class="field">
+      <label>বিনিয়োগকৃত পরিমাণ <span id="investLimitHint" style="font-weight:400;color:var(--muted);font-size:12px"></span></label>
+      <div class="iw"><span class="tk">৳</span>
+        <input type="number" id="investAmount" inputmode="numeric" min="0" placeholder="0">
+      </div>
+    </div>
+
+    <button type="button" id="addInvestBtn" class="add-btn" onclick="addInvestment()">+ যোগ করুন</button>
+
+    <div id="investItems" style="margin-top:10px"></div>
+
+    <div id="investTotalRow" class="invest-total-row" style="display:none">
+      <span style="font-weight:700;font-size:14px">মোট অনুমোদনযোগ্য বিনিয়োগ</span>
+      <span id="totalAllowable" style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px">৳ 0</span>
+    </div>
+  </div>
+
+  <div class="reset-row">
+    <button type="button" class="reset" id="resetBtn">↺ সব মুছে দিন (Reset)</button>
+  </div>
+
+  <!-- ── Section 1: Income & Investment ── -->
+  <section aria-live="polite">
+    <div class="result-block">
+      <div class="block-title">আয় ও বিনিয়োগ রিবেট হিসাব</div>
+      <div class="row">
+        <span class="name">বার্ষিক আয় (Annual Income)</span>
+        <span class="value" id="v-annual">৳ 0</span>
+      </div>
+      <div class="row">
+        <span class="name">করমুক্ত অংশ (Tax-Free Amount)</span>
+        <span class="value" id="v-taxfree">৳ 0</span>
+      </div>
+      <div class="row">
+        <span class="name">করযোগ্য আয় (Taxable Income)</span>
+        <span class="value" id="v-taxable">৳ 0</span>
+      </div>
+      <div class="row" id="rebate-income-row">
+        <span class="name">সর্বোচ্চ রিবেট (Maximum Rebate)</span>
+        <span class="value" id="v-rebate">৳ 0</span>
+      </div>
+    </div>
+    <div class="final-box green">
+      <div class="flabel">প্রয়োজনীয় বিনিয়োগ · Required Investment</div>
+      <div class="famount" id="v-invest">৳ 0</div>
+      <div class="fmsg" id="investMsg">আয়ের তথ্য দিলে এখানে আপনার বিনিয়োগ লক্ষ্য দেখা যাবে।</div>
+    </div>
+
+    <!-- Investment analysis (shown when existing investments are entered) -->
+    <div id="investAnalysis" style="display:none;margin-top:8px">
+      <div class="row">
+        <span class="name">বিনিয়োগকৃত মোট (অনুমোদনযোগ্য)</span>
+        <span class="value" id="v-exist-invest">৳ 0</span>
+      </div>
+      <div class="row">
+        <span class="name">বিদ্যমান বিনিয়োগ থেকে রিবেট (×১৫%)</span>
+        <span class="value" id="v-exist-rebate">৳ 0</span>
+      </div>
+      <div class="row" id="remaining-row">
+        <span class="name">আরও বিনিয়োগ প্রয়োজন</span>
+        <span class="value" id="v-remaining-invest">৳ 0</span>
+      </div>
+      <div style="padding:8px 0 4px;font-size:13px;color:var(--green);font-weight:700" id="v-invest-status"></div>
+    </div>
+
+    <!-- ── Section 2: Tax slab ── -->
+    <div class="result-block" style="margin-top:28px">
+      <div class="block-title">স্ল্যাব ভিত্তিক আয়কর হিসাব</div>
+    </div>
+    <div class="slab-wrap">
+      <table class="slab">
+        <thead>
+          <tr>
+            <th>আয়ের স্তর</th>
+            <th>করযোগ্য অংশ</th>
+            <th>হার</th>
+            <th>কর</th>
+          </tr>
+        </thead>
+        <tbody id="slabRows">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:18px;font-size:13px">আয়ের তথ্য দিন</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row" style="margin-top:4px">
+      <span class="name">মোট কর (Gross Tax)</span>
+      <span class="value" id="v-gross">৳ 0</span>
+    </div>
+    <div class="row" id="rebate-row">
+      <span class="name">বিনিয়োগ রিবেট (Investment Rebate)</span>
+      <span class="value deduct" id="v-rebate2">− ৳ 0</span>
+    </div>
+    <div class="row">
+      <span class="name">প্রদেয় আয়কর (Net Tax Payable)</span>
+      <span class="value" id="v-nettax-row">৳ 0</span>
+    </div>
+    <div class="row">
+      <span class="name">কর্তনকৃত TDS (Deducted at Source)</span>
+      <span class="value deduct" id="v-tds-row">− ৳ 0</span>
+    </div>
+    <div class="final-box navy">
+      <div class="flabel" id="finalTaxLabel">রিটার্নে পরিশোধযোগ্য কর · Tax to Pay</div>
+      <div class="famount" id="v-nettax">৳ 0</div>
+      <div class="fmsg" id="taxMsg">আয়ের তথ্য দিলে প্রদেয় কর এখানে দেখাবে।</div>
     </div>
   </section>
 
-  <!-- ============ TRUST BADGES / STATS ============ -->
-  <section class="bg-slate-50 border-y border-slate-200">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-8">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div class="flex items-center gap-3 justify-center md:justify-start">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-teal shrink-0" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" />
-  <circle cx="12" cy="8" r="6" /></svg>
-          <div class="leading-tight">
-            <p class="text-sm font-bold text-navy">QuickBooks Certified</p>
-            <p class="text-xs text-slate">ProAdvisor</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3 justify-center md:justify-start">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-teal shrink-0" aria-hidden="true"><path d="m10.852 19.772-.383.924" />
-  <path d="m13.148 14.228.383-.923" />
-  <path d="M13.148 19.772a3 3 0 1 0-2.296-5.544l-.383-.923" />
-  <path d="m13.53 20.696-.382-.924a3 3 0 1 1-2.296-5.544" />
-  <path d="m14.772 15.852.923-.383" />
-  <path d="m14.772 18.148.923.383" />
-  <path d="M4.2 15.1a7 7 0 1 1 9.93-9.858A7 7 0 0 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.2" />
-  <path d="m9.228 15.852-.923-.383" />
-  <path d="m9.228 18.148-.923.383" /></svg>
-          <div class="leading-tight">
-            <p class="text-sm font-bold text-navy">Xero Certified</p>
-            <p class="text-xs text-slate">Advisor Partner</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3 justify-center md:justify-start">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-teal shrink-0" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-  <path d="m9 12 2 2 4-4" /></svg>
-          <div class="leading-tight">
-            <p class="text-sm font-bold text-navy">100% Compliance</p>
-            <p class="text-xs text-slate">Accurate filing</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3 justify-center md:justify-start">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-teal shrink-0" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-  <path d="M16 3.128a4 4 0 0 1 0 7.744" />
-  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-  <circle cx="9" cy="7" r="4" /></svg>
-          <div class="leading-tight">
-            <p class="text-sm font-bold text-navy">20+ Clients</p>
-            <p class="text-xs text-slate">Served remotely</p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- Print / PDF button -->
+  <button type="button" class="print-btn" id="printBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M6 17H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/>
+      <rect x="6" y="13" width="12" height="8" rx="1"/>
+      <path d="M6 7V3h12v4"/>
+    </svg>
+    PDF হিসেবে সেভ করুন
+  </button>
+
+  <!-- Investment options table -->
+  <section class="options">
+    <h2>কোথায় বিনিয়োগ করবেন — Allowable Investment Options</h2>
+    <p class="sub">নিচের খাতগুলোতে বিনিয়োগ বা দান করলে ট্যাক্স ক্রেডিট পাওয়া যায়।</p>
+    <table>
+      <thead><tr><th>খাত / Details</th><th>সর্বোচ্চ সীমা</th></tr></thead>
+      <tbody>
+        <tr><td>জীবন বীমা প্রিমিয়াম (Life insurance premium)</td><td class="lim">পলিসি মূল্যের 10%</td></tr>
+        <tr><td>স্বীকৃত প্রভিডেন্ট ফান্ডে নিয়োগকর্তা ও কর্মীর অবদান</td><td class="lim">No limit</td></tr>
+        <tr><td>সুপারঅ্যানুয়েশন ফান্ডে অবদান</td><td class="lim">No limit</td></tr>
+        <tr>
+          <td>সরকারি সিকিউরিটিজে বিনিয়োগ (Treasury bill, Bond, সঞ্চয়পত্র, Debenture, শরিয়াহভিত্তিক সিকিউরিটিজ)</td>
+          <td class="lim">৳ 5,00,000</td>
+        </tr>
+        <tr>
+          <td>ইউনিট সার্টিফিকেট, মিউচুয়াল ফান্ড, ETF বা যৌথ বিনিয়োগ স্কিম</td>
+          <td class="lim">৳ 5,00,000</td>
+        </tr>
+        <tr><td>ডিপোজিট পেনশন স্কিম (DPS) বা মাসিক সঞ্চয় স্কিম</td><td class="lim">৳ 1,20,000</td></tr>
+        <tr><td>BSEC নিয়ন্ত্রিত স্টক এক্সচেঞ্জের তালিকাভুক্ত সিকিউরিটিজে বিনিয়োগ</td><td class="lim">No limit</td></tr>
+        <tr><td>NBR অনুমোদিত দাতব্য হাসপাতালে দান (সিটি কর্পোরেশন এলাকার বাইরে)</td><td class="lim">No limit</td></tr>
+        <tr><td>প্রতিবন্ধী কল্যাণে প্রতিষ্ঠিত সংস্থায় দান</td><td class="lim">No limit</td></tr>
+        <tr><td>যাকাত ফান্ড / Zakat Fund Management Act, 2023 অনুযায়ী দাতব্য ফান্ডে দান</td><td class="lim">No limit</td></tr>
+        <tr><td>NBR অনুমোদিত বেনেভোলেন্ট ফান্ড ও গ্রুপ ইনস্যুরেন্স স্কিমে অবদান</td><td class="lim">No limit</td></tr>
+        <tr><td>জনউন্নয়ন বা শিক্ষার জন্য বোর্ড অনুমোদিত প্রতিষ্ঠানে দান</td><td class="lim">No limit</td></tr>
+        <tr><td>মুক্তিযুদ্ধ জাদুঘরে দান (Liberation War Museum)</td><td class="lim">No limit</td></tr>
+      </tbody>
+    </table>
   </section>
 
-  <!-- ============ SERVICES ============ -->
-  <section id="services" class="py-20 lg:py-28 bg-white">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mx-auto text-center reveal">
-        <span class="text-sm font-bold text-teal uppercase tracking-wider">What We Do</span>
-        <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-navy tracking-tight">Two specialties. One trusted partner.</h2>
-        <p class="mt-4 text-lg text-slate">From day-to-day bookkeeping to year-end filing, we keep your finances accurate, organized, and ready for whatever comes next.</p>
-      </div>
+</div><!-- /wrap -->
 
-      <div class="mt-14 grid md:grid-cols-2 gap-8">
-        <!-- Card 1: Cloud Accounting -->
-        <div class="reveal group rounded-2xl border border-slate-200 p-8 hover:border-teal/40 hover:shadow-xl hover:shadow-slate-200/60 transition-all">
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-teal/10 text-teal mb-6 group-hover:bg-teal group-hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg>
-          </div>
-          <h3 class="text-2xl font-bold text-navy">Cloud Accounting Solutions</h3>
-          <p class="mt-3 text-slate leading-relaxed">Powered by QuickBooks Online and Xero. We set up, clean up, and run your books so you always have a real-time view of your business.</p>
-          <div class="mt-5 flex items-center gap-3">
-            <span class="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-navy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-teal" aria-hidden="true"><circle cx="12" cy="12" r="10" /></svg> QuickBooks Online</span>
-            <span class="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-navy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-teal" aria-hidden="true"><circle cx="12" cy="12" r="10" /></svg> Xero</span>
-          </div>
-          <ul class="mt-6 space-y-3 text-slate">
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Monthly bookkeeping & categorization</li>
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Bank & credit card reconciliation</li>
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Financial statements & reporting</li>
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Software setup, migration & clean-ups</li>
-          </ul>
-        </div>
-
-        <!-- Card 2: Income Tax -->
-        <div class="reveal group rounded-2xl border border-slate-200 p-8 hover:border-teal/40 hover:shadow-xl hover:shadow-slate-200/60 transition-all">
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-teal/10 text-teal mb-6 group-hover:bg-teal group-hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
-  <path d="M14 2v5a1 1 0 0 0 1 1h5" />
-  <path d="M10 9H8" />
-  <path d="M16 13H8" />
-  <path d="M16 17H8" /></svg>
-          </div>
-          <h3 class="text-2xl font-bold text-navy">Income Tax Services</h3>
-          <p class="mt-3 text-slate leading-relaxed">Comprehensive tax preparation, planning, and compliance for businesses and individuals. We file accurately and look ahead to lower what you owe.</p>
-          <div class="mt-5 flex items-center gap-3">
-            <span class="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-navy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-teal" aria-hidden="true"><circle cx="12" cy="12" r="10" /></svg> Business</span>
-            <span class="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-navy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-teal" aria-hidden="true"><circle cx="12" cy="12" r="10" /></svg> Individual</span>
-          </div>
-          <ul class="mt-6 space-y-3 text-slate">
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Tax return preparation & e-filing</li>
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Strategic, year-round tax planning</li>
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Quarterly estimates & deadline tracking</li>
-            <li class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Compliance support & notice resolution</li>
-          </ul>
-        </div>
-      </div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="f-name">Md. Nur Uddin Mahmud</span>
+      <span class="f-role">Income Tax Practitioner</span>
+      <span class="f-role">BBA & MBA, University of Chittagong</span>
     </div>
-  </section>
+    <a class="wa-link" href="https://wa.me/8801521222707" target="_blank" rel="noopener" aria-label="WhatsApp: 01521222707">
+      <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+        <path d="M16.04 3C9.42 3 4.05 8.36 4.05 14.97c0 2.11.55 4.17 1.6 5.99L4 29l8.21-1.6a12 12 0 0 0 3.83.62h.01c6.61 0 11.98-5.36 11.98-11.97A11.9 11.9 0 0 0 16.04 3zm0 21.9h-.01a9.9 9.9 0 0 1-3.46-.66l-.25-.1-4.87.95.98-4.74-.16-.26a9.92 9.92 0 0 1-1.52-5.12c0-5.48 4.47-9.94 9.96-9.94a9.9 9.9 0 0 1 9.95 9.95c0 5.48-4.47 9.92-9.62 9.92zm5.46-7.43c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.11 3.22 5.1 4.51.71.31 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z"/>
+      </svg>
+      <span class="wa-num">01521222707</span>
+    </a>
+  </div>
+</footer>
 
-  <!-- ============ ABOUT / WHY CHOOSE US + PROCESS ============ -->
-  <section id="about" class="py-20 lg:py-28 bg-navy text-white relative overflow-hidden">
-    <div class="absolute inset-0 grid-bg opacity-40"></div>
-    <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="grid lg:grid-cols-2 gap-14 items-start">
-        <div class="reveal">
-          <span class="text-sm font-bold text-teal-light uppercase tracking-wider">Why IncoTax Solutions</span>
-          <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight">Accuracy you can trust. Peace of mind you can feel.</h2>
-          <p class="mt-5 text-slate-300 leading-relaxed text-lg">We're a fully remote firm built for modern businesses. That means no paper shuffling, no missed deadlines, and no surprises — just clean books and confident filings, every month and every season.</p>
-          <div class="mt-8 grid sm:grid-cols-2 gap-5">
-            <div class="rounded-xl bg-white/5 border border-white/10 p-5">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-teal-light" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></svg>
-              <h4 class="mt-3 font-bold">Fully Remote</h4>
-              <p class="mt-1 text-sm text-slate-400">Work with us from anywhere. Secure, cloud-first, and paperless.</p>
-            </div>
-            <div class="rounded-xl bg-white/5 border border-white/10 p-5">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-teal-light" aria-hidden="true"><circle cx="12" cy="12" r="10" />
-  <circle cx="12" cy="12" r="6" />
-  <circle cx="12" cy="12" r="2" /></svg>
-              <h4 class="mt-3 font-bold">Detail-Obsessed</h4>
-              <p class="mt-1 text-sm text-slate-400">Reconciled to the cent and reviewed before anything is filed.</p>
-            </div>
-            <div class="rounded-xl bg-white/5 border border-white/10 p-5">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-teal-light" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg>
-              <h4 class="mt-3 font-bold">Responsive Support</h4>
-              <p class="mt-1 text-sm text-slate-400">A real advisor who responds quickly and keeps you updated at every step.</p>
-            </div>
-            <div class="rounded-xl bg-white/5 border border-white/10 p-5">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-teal-light" aria-hidden="true"><path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z" />
-  <path d="M16 10h.01" />
-  <path d="M2 8v1a2 2 0 0 0 2 2h1" /></svg>
-              <h4 class="mt-3 font-bold">Proactive Savings</h4>
-              <p class="mt-1 text-sm text-slate-400">We plan ahead to find deductions before the deadline, not after.</p>
-            </div>
-          </div>
-        </div>
+<script>
+(function(){
 
-        <!-- Process -->
-        <div id="process" class="reveal">
-          <h3 class="text-2xl font-bold">How we work together</h3>
-          <p class="mt-2 text-slate-400">A simple, transparent process from first call to final filing.</p>
-          <ol class="mt-8 space-y-6">
-            <li class="flex gap-5">
-              <span class="shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal text-white font-extrabold">1</span>
-              <div>
-                <h4 class="font-bold text-lg flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-light" aria-hidden="true"><path d="M13 2a9 9 0 0 1 9 9" />
-  <path d="M13 6a5 5 0 0 1 5 5" />
-  <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></svg> Consultation</h4>
-                <p class="mt-1 text-slate-300">We start with a free call to understand your business, your current setup, and your goals — no obligation.</p>
-              </div>
-            </li>
-            <li class="flex gap-5">
-              <span class="shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal text-white font-extrabold">2</span>
-              <div>
-                <h4 class="font-bold text-lg flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-light" aria-hidden="true"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z" />
-  <path d="m2 22 3-3" />
-  <path d="M7.5 13.5 10 11" />
-  <path d="M10.5 16.5 13 14" />
-  <path d="m18 3-4 4h6l-4 4" /></svg> Integration</h4>
-                <p class="mt-1 text-slate-300">We set up or migrate your QuickBooks Online or Xero account, connect your banks, and clean up any backlog.</p>
-              </div>
-            </li>
-            <li class="flex gap-5">
-              <span class="shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal text-white font-extrabold">3</span>
-              <div>
-                <h4 class="font-bold text-lg flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-light" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-  <path d="M21 3v5h-5" />
-  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-  <path d="M8 16H3v5" /></svg> Ongoing Support & Filing</h4>
-                <p class="mt-1 text-slate-300">We maintain your books monthly, send clear reports, and handle tax planning and filing so deadlines are always covered.</p>
-              </div>
-            </li>
-          </ol>
-          <a href="https://wa.me/8801346808902" target="_blank" rel="noopener" class="mt-8 inline-flex items-center gap-2 rounded-lg bg-teal hover:bg-teal-dark text-white font-semibold px-6 py-3 transition-colors">
-            Start with a free consultation <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M5 12h14" />
-  <path d="m12 5 7 7-7 7" /></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  /* ─── Month definitions ─── */
+  const MONTHS = [
+    {key:'jul',bn:'জুলাই',   en:'Jul'},
+    {key:'aug',bn:'আগস্ট',   en:'Aug'},
+    {key:'sep',bn:'সেপ্টেম্বর',en:'Sep'},
+    {key:'oct',bn:'অক্টোবর', en:'Oct'},
+    {key:'nov',bn:'নভেম্বর', en:'Nov'},
+    {key:'dec',bn:'ডিসেম্বর',en:'Dec'},
+    {key:'jan',bn:'জানুয়ারি',en:'Jan'},
+    {key:'feb',bn:'ফেব্রুয়ারি',en:'Feb'},
+    {key:'mar',bn:'মার্চ',   en:'Mar'},
+    {key:'apr',bn:'এপ্রিল', en:'Apr'},
+    {key:'may',bn:'মে',      en:'May'},
+    {key:'jun',bn:'জুন',     en:'Jun'},
+  ];
 
-  <!-- ============ TESTIMONIALS ============ -->
-  <section id="testimonials" class="py-20 lg:py-28 bg-white">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mx-auto text-center reveal">
-        <span class="text-sm font-bold text-teal uppercase tracking-wider">Client Stories</span>
-        <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-navy tracking-tight">Trusted by businesses that hate surprises</h2>
-        <p class="mt-4 text-lg text-slate">Here's what clients say after switching to IncoTax Solutions.</p>
-      </div>
+  /* ─── Build month grid ─── */
+  const grid = document.getElementById('monthsGrid');
+  MONTHS.forEach(m => {
+    const d = document.createElement('div');
+    d.className = 'month-field';
+    d.innerHTML =
+      '<label for="m-'+m.key+'">'+m.bn+'<span class="fiscal">('+m.en+')</span></label>'+
+      '<div class="mini-wrap"><span class="tk">৳</span>'+
+      '<input type="number" id="m-'+m.key+'" inputmode="numeric" min="0" placeholder="0"></div>';
+    grid.appendChild(d);
+  });
 
-      <div class="mt-14 grid md:grid-cols-3 gap-8">
-        <!-- Review 1 -->
-        <figure class="reveal rounded-2xl border border-slate-200 p-7 flex flex-col">
-          <div class="flex gap-1 text-teal mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-          </div>
-          <blockquote class="text-slate leading-relaxed flex-1">"Our QuickBooks Online migration was completely painless. They cleaned up two years of messy books in weeks, and now I finally understand my numbers. Best decision we made this year."</blockquote>
-          <figcaption class="mt-6 flex items-center gap-3">
-            <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-navy text-teal-light font-bold">DM</span>
-            <div class="leading-tight">
-              <p class="font-bold text-navy">Daniela Morales</p>
-              <p class="text-sm text-slate">Founder, Brightline Studio</p>
-            </div>
-          </figcaption>
-        </figure>
+  const monthInputs = () => MONTHS.map(m => document.getElementById('m-'+m.key));
 
-        <!-- Review 2 -->
-        <figure class="reveal rounded-2xl border border-slate-200 p-7 flex flex-col">
-          <div class="flex gap-1 text-teal mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-          </div>
-          <blockquote class="text-slate leading-relaxed flex-1">"For the first time, tax season was genuinely stress-free. Everything was organized, filed early, and they found deductions my old accountant missed. I can't recommend them enough."</blockquote>
-          <figcaption class="mt-6 flex items-center gap-3">
-            <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-navy text-teal-light font-bold">RP</span>
-            <div class="leading-tight">
-              <p class="font-bold text-navy">Raj Patel</p>
-              <p class="text-sm text-slate">Freelance Consultant</p>
-            </div>
-          </figcaption>
-        </figure>
+  /* ─── Helpers ─── */
+  const fmt = new Intl.NumberFormat('en-IN',{maximumFractionDigits:0});
+  const num = n => fmt.format(Math.round(n));
+  const bdt = n => '৳ '+num(n);
 
-        <!-- Review 3 -->
-        <figure class="reveal rounded-2xl border border-slate-200 p-7 flex flex-col">
-          <div class="flex gap-1 text-teal mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
-          </div>
-          <blockquote class="text-slate leading-relaxed flex-1">"Being fully remote, we needed a firm that lives in the cloud. Their Xero setup and monthly reporting give us a clear picture of cash flow at all times. Truly a partner, not just a vendor."</blockquote>
-          <figcaption class="mt-6 flex items-center gap-3">
-            <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-navy text-teal-light font-bold">SK</span>
-            <div class="leading-tight">
-              <p class="font-bold text-navy">Sarah Kim</p>
-              <p class="text-sm text-slate">COO, Northpeak Logistics</p>
-            </div>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
+  function readMonth(inp){
+    const v = inp.value.trim();
+    if(v===''){inp.classList.remove('invalid');return 0;}
+    const n = Number(v);
+    if(!isFinite(n)||n<0){inp.classList.add('invalid');return null;}
+    inp.classList.remove('invalid');
+    return n;
+  }
 
-  <!-- ============ CTA / CONTACT ============ -->
-  <section id="contact" class="py-20 lg:py-28 bg-slate-50 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="grid lg:grid-cols-2 gap-12 items-start">
-        <!-- Left: message + details -->
-        <div class="reveal">
-          <span class="text-sm font-bold text-teal uppercase tracking-wider">Get Started</span>
-          <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-navy tracking-tight">Book your free consultation</h2>
-          <p class="mt-4 text-lg text-slate leading-relaxed">Tell us a little about your business and what you need. We'll get back to you within one business day to schedule your free, no-obligation call.</p>
+  const bonusFields = {
+    festival:{input:document.getElementById('festival'),wrap:document.getElementById('f-festival')},
+    other:   {input:document.getElementById('other'),   wrap:document.getElementById('f-other')},
+    tds:     {input:document.getElementById('tds'),     wrap:document.getElementById('f-tds')},
+  };
 
-          <div class="mt-9 space-y-5">
-            <div class="flex items-center gap-4">
-              <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal/10 text-teal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
-  <rect x="2" y="4" width="20" height="16" rx="2" /></svg></span>
-              <div>
-                <p class="text-sm text-slate">Email us</p>
-                <a href="mailto:incotaxsolutions@gmail.com" class="font-bold text-navy hover:text-teal transition-colors">incotaxsolutions@gmail.com</a>
-              </div>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal/10 text-teal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></svg></span>
-              <div>
-                <p class="text-sm text-slate">Call us</p>
-                <a href="tel:+8801346808902" class="font-bold text-navy hover:text-teal transition-colors">+880 1346 808902</a>
-              </div>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal/10 text-teal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
-  <circle cx="12" cy="10" r="3" /></svg></span>
-              <div>
-                <p class="text-sm text-slate">Location</p>
-                <p class="font-bold text-navy">Serving clients globally &amp; nationwide · Remote-first</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal/10 text-teal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><circle cx="12" cy="12" r="10" />
-  <path d="M12 6v6l4 2" /></svg></span>
-              <div>
-                <p class="text-sm text-slate">Office hours</p>
-                <p class="font-bold text-navy">Mon–Fri, 9:00 AM – 6:00 PM</p>
-              </div>
-            </div>
-          </div>
-        </div>
+  function setErr(f,on){
+    f.wrap.classList.toggle('has-error',on);
+    f.input.classList.toggle('invalid',on);
+  }
+  function readBonus(f){
+    const v=f.input.value.trim();
+    if(v===''){setErr(f,false);return 0;}
+    const n=Number(v);
+    if(!isFinite(n)||n<0){setErr(f,true);return null;}
+    setErr(f,false);return n;
+  }
 
-        <!-- Right: form -->
-        <div class="reveal rounded-2xl bg-white border border-slate-200 shadow-xl shadow-slate-200/60 p-7 sm:p-9">
-          <div id="form-success" class="hidden mb-6 rounded-lg bg-teal/10 border border-teal/30 px-4 py-3 text-sm font-semibold text-teal-dark flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"><circle cx="12" cy="12" r="10" />
-  <path d="m9 12 2 2 4-4" /></svg>
-            Opening WhatsApp with your details — just hit send to reach us. We'll reply within one business day.
-          </div>
-          <div class="space-y-5">
-            <div>
-              <label for="name" class="block text-sm font-semibold text-navy mb-1.5">Full name</label>
-              <input id="name" name="name" type="text" placeholder="Jane Doe" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" />
-            </div>
-            <div>
-              <label for="email" class="block text-sm font-semibold text-navy mb-1.5">Email address</label>
-              <input id="email" name="email" type="email" placeholder="jane@company.com" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" />
-            </div>
-            <div>
-              <label for="service" class="block text-sm font-semibold text-navy mb-1.5">Service needed</label>
-              <select id="service" name="service" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-navy bg-white focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition">
-                <option value="">Select a service…</option>
-                <option>Cloud Accounting (QuickBooks Online)</option>
-                <option>Cloud Accounting (Xero)</option>
-                <option>Bookkeeping clean-up / catch-up</option>
-                <option>Income Tax Preparation & Filing</option>
-                <option>Tax Planning & Strategy</option>
-                <option>Both Accounting & Tax</option>
-                <option>Not sure yet — need advice</option>
-              </select>
-            </div>
-            <div>
-              <label for="message" class="block text-sm font-semibold text-navy mb-1.5">Message</label>
-              <textarea id="message" name="message" rows="4" placeholder="Tell us about your business and what you're looking for…" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition resize-none"></textarea>
-            </div>
-            <button id="submit-btn" type="button" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-teal hover:bg-teal-dark text-white font-semibold px-6 py-3.5 transition-colors shadow-lg shadow-teal/20">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
-  <path d="m21.854 2.147-10.94 10.939" /></svg>
-              Book My Free Consultation
-            </button>
-            <p class="text-xs text-slate text-center">By submitting, you agree to be contacted about your inquiry. We respect your privacy.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  /* ─── Exemption limit ─── */
+  function getExemptionLimit(){
+    const base   = parseInt(document.getElementById('category').value);
+    const kids   = Math.max(0, parseInt(document.getElementById('disabledKids').value)||0);
+    return base + kids*50000;
+  }
 
-  <!-- ============ FOOTER ============ -->
-  <footer class="bg-navy text-slate-300">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-14">
-      <div class="grid md:grid-cols-4 gap-10">
-        <div class="md:col-span-1">
-          <a href="#home" class="flex items-center gap-2.5">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-light" aria-hidden="true"><path d="M10 18v-7" />
-  <path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />
-  <path d="M14 18v-7" />
-  <path d="M18 18v-7" />
-  <path d="M3 22h18" />
-  <path d="M6 18v-7" /></svg>
-            </span>
-            <span class="text-lg font-extrabold text-white tracking-tight">Inc<span style="display:inline-flex;align-items:center;justify-content:center;width:0.8em;height:0.8em;border:0.1em solid #DC2626;border-radius:9999px;vertical-align:0.04em;line-height:1;box-sizing:border-box;"><span style="color:#DC2626;font-size:0.58em;font-weight:700;line-height:1;">&#x09F3;</span></span>Tax <span class="text-teal-light">Solutions</span></span>
-          </a>
-          <p class="mt-4 text-sm leading-relaxed text-slate-400">Cloud accounting and income tax services for small businesses, freelancers, and individuals. Remote, accurate, and always on your side.</p>
-        </div>
+  /* ─── Slab calculator ─── */
+  function slabTax(income, exemptionLimit){
+    const bands = [
+      {lbl:'করমুক্ত (প্রথম '+num(exemptionLimit)+')',  size:exemptionLimit, rate:0},
+      {lbl:'পরবর্তী ৩,০০,০০০',  size:300000,  rate:0.10},
+      {lbl:'পরবর্তী ৪,০০,০০০',  size:400000,  rate:0.15},
+      {lbl:'পরবর্তী ৫,০০,০০০',  size:500000,  rate:0.20},
+      {lbl:'পরবর্তী ২০,০০,০০০', size:2000000, rate:0.30},
+      {lbl:'অবশিষ্ট',           size:Infinity,rate:0.30},
+    ];
+    let rem = income, total = 0;
+    const rows = [];
+    for(const b of bands){
+      if(rem<=0) break;
+      const inBand = b.size===Infinity ? rem : Math.min(rem, b.size);
+      const tax    = inBand * b.rate;
+      rows.push({lbl:b.lbl, inBand, rate:b.rate, tax});
+      total += tax;
+      rem   -= inBand;
+    }
+    return {total:Math.round(total), rows};
+  }
 
-        <div>
-          <h4 class="text-white font-bold mb-4">Services</h4>
-          <ul class="space-y-3 text-sm">
-            <li><a href="#services" class="hover:text-teal-light transition-colors">Cloud Accounting</a></li>
-            <li><a href="#services" class="hover:text-teal-light transition-colors">QuickBooks Online</a></li>
-            <li><a href="#services" class="hover:text-teal-light transition-colors">Xero Setup & Migration</a></li>
-            <li><a href="#services" class="hover:text-teal-light transition-colors">Income Tax Services</a></li>
-          </ul>
-        </div>
+  /* ─── Render slab table ─── */
+  function renderSlab(rows){
+    const tbody = document.getElementById('slabRows');
+    if(!rows||rows.length===0){
+      tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:18px;font-size:13px">আয়ের তথ্য দিন</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(r=>{
+      const isZero = r.rate===0;
+      const rateStr = (r.rate*100)+'%';
+      return '<tr>'+
+        '<td>'+r.lbl+'</td>'+
+        '<td class="amt-col">'+bdt(r.inBand)+'</td>'+
+        '<td class="rate-col '+(isZero?'zero':'')+'">'+rateStr+'</td>'+
+        '<td class="tax-col '+(isZero?'zero':'')+'">'+bdt(r.tax)+'</td>'+
+      '</tr>';
+    }).join('');
+  }
 
-        <div>
-          <h4 class="text-white font-bold mb-4">Company</h4>
-          <ul class="space-y-3 text-sm">
-            <li><a href="#about" class="hover:text-teal-light transition-colors">About Us</a></li>
-            <li><a href="#process" class="hover:text-teal-light transition-colors">Our Process</a></li>
-            <li><a href="#testimonials" class="hover:text-teal-light transition-colors">Testimonials</a></li>
-            <li><a href="#" class="hover:text-teal-light transition-colors">Resources</a></li>
-            <li><a href="#" class="hover:text-teal-light transition-colors">Blog</a></li>
-            <li><a href="#contact" class="hover:text-teal-light transition-colors">Book a Consultation</a></li>
-          </ul>
-        </div>
+  /* ─── Main calculate ─── */
+  function calculate(){
+    // 1. Months
+    let salaryTotal=0, monthErr=false;
+    monthInputs().forEach(inp=>{
+      const v=readMonth(inp);
+      if(v===null) monthErr=true; else salaryTotal+=v;
+    });
 
-        <div>
-          <h4 class="text-white font-bold mb-4">Legal</h4>
-          <ul class="space-y-3 text-sm">
-            <li><a href="#" class="hover:text-teal-light transition-colors">Privacy Policy</a></li>
-            <li><a href="#" class="hover:text-teal-light transition-colors">Terms of Service</a></li>
-            <li><a href="#" class="hover:text-teal-light transition-colors">Cookie Policy</a></li>
-          </ul>
-          <div class="flex items-center gap-3 mt-6">
-            <a href="https://www.linkedin.com/company/incotax-solutions" target="_blank" rel="noopener" aria-label="LinkedIn" class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 hover:bg-teal text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-            <a href="https://www.facebook.com/IncoTaxBD" target="_blank" rel="noopener" aria-label="Facebook" class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 hover:bg-teal text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
-          </div>
-        </div>
-      </div>
+    // 2. Bonuses + TDS
+    const festival = readBonus(bonusFields.festival);
+    const other    = readBonus(bonusFields.other);
+    const tds      = readBonus(bonusFields.tds);
 
-      <div class="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-sm text-slate-400">© <span id="year"></span> IncoTax Solutions. All rights reserved.</p>
-        <p class="text-sm text-slate-400 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-light" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-  <path d="m9 12 2 2 4-4" /></svg> QuickBooks Certified ProAdvisor · Xero Certified</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ============ SCRIPTS ============ -->
-  <script>
-    // Icons are inlined as SVG — no icon library needed.
-
-    // Mobile menu toggle
-    const toggle = document.getElementById('menu-toggle');
-    const menu = document.getElementById('mobile-menu');
-    const openIcon = document.getElementById('menu-open-icon');
-    const closeIcon = document.getElementById('menu-close-icon');
-
-    function closeMenu() {
-      menu.classList.add('hidden');
-      openIcon.classList.remove('hidden');
-      closeIcon.classList.add('hidden');
-      toggle.setAttribute('aria-expanded', 'false');
+    if(monthErr||festival===null||other===null||tds===null){
+      document.getElementById('investMsg').textContent='ইনপুটে ভুল আছে।';
+      document.getElementById('taxMsg').textContent='ইনপুটে ভুল আছে।';
+      return;
     }
 
-    toggle.addEventListener('click', () => {
-      const isHidden = menu.classList.toggle('hidden');
-      openIcon.classList.toggle('hidden', !isHidden);
-      closeIcon.classList.toggle('hidden', isHidden);
-      toggle.setAttribute('aria-expanded', String(!isHidden));
-    });
+    // 3. Income calc
+    const annual   = salaryTotal + festival + other;
+    const taxFree  = Math.min(annual/3, 500000);
+    const taxable  = annual - taxFree;
+    const maxRebate= Math.round(taxable * 0.03);
+    const reqInvest= Math.round(maxRebate / 0.15);
 
-    // Close mobile menu when a link is tapped
-    document.querySelectorAll('.mobile-link').forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
+    document.getElementById('v-annual').textContent  = bdt(annual);
+    document.getElementById('v-taxfree').textContent = bdt(taxFree);
+    document.getElementById('v-taxable').textContent = bdt(taxable);
+    document.getElementById('v-rebate').textContent  = bdt(maxRebate);
+    document.getElementById('v-invest').textContent  = bdt(reqInvest);
 
-    // Current year in footer
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // 5. Tax slab calc
+    const exemptionLimit = getExemptionLimit();
+    const {total:grossTax, rows} = slabTax(taxable, exemptionLimit);
 
-    // Contact form -> opens a WhatsApp chat with the details prefilled
-    const WHATSAPP_NUMBER = '8801346808902';
-    const submitBtn = document.getElementById('submit-btn');
-    const successMsg = document.getElementById('form-success');
-    submitBtn.addEventListener('click', () => {
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const service = document.getElementById('service').value.trim();
-      const message = document.getElementById('message').value.trim();
-      if (!name || !email) {
-        alert('Please enter your name and email so we can reach you.');
-        return;
+    renderSlab(annual>0 ? rows : null);
+
+    document.getElementById('v-gross').textContent = bdt(grossTax);
+
+    // Minimum tax rules:
+    // grossTax = 0 + new taxpayer  → ৳1,000
+    // grossTax = 0 + others        → ৳0
+    // 0 < grossTax ≤ 5000          → ৳5,000 (min), rebate has NO effect
+    // grossTax > 5000              → max(grossTax - rebate, 5,000)
+    //   └ rebate useful only for the portion above 5,000
+    const isNew = document.getElementById('newTaxpayer').checked;
+    let finalTax    = 0;
+    let minApplied  = false;
+    let appliedRebate = 0;   // rebate that actually reduces tax
+    let usefulInvest  = 0;   // investment required for that rebate
+
+    if(grossTax > 5000){
+      const afterRebate = grossTax - maxRebate;
+      finalTax    = Math.max(afterRebate, 5000);
+      minApplied  = afterRebate < 5000;
+      if(minApplied){
+        // Can only reduce down to 5000
+        appliedRebate = grossTax - 5000;
+        usefulInvest  = Math.round(appliedRebate / 0.15);
+      } else {
+        appliedRebate = maxRebate;
+        usefulInvest  = reqInvest;
       }
-      const lines = [
-        'Hello IncoTax Solutions, I would like to book a free consultation.',
-        '',
-        'Name: ' + name,
-        'Email: ' + email,
-      ];
-      if (service) lines.push('Service needed: ' + service);
-      if (message) lines.push('Message: ' + message);
-      const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(lines.join('\n'));
-      window.open(url, '_blank', 'noopener');
-      successMsg.classList.remove('hidden');
-      successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+    } else if(grossTax > 0){
+      // 1 – 5000: minimum kicks in, rebate has zero effect
+      finalTax   = 5000;
+      minApplied = true;
+    } else if(isNew){
+      finalTax   = 1000;
+      minApplied = true;
+    }
 
-    // Scroll reveal animations
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+    // Show applied rebate in slab section
+    document.getElementById('v-rebate2').textContent = '− '+bdt(appliedRebate);
+
+    // 4. Investment section — depends on whether rebate is useful
+    const investUseful = grossTax > 5000;  // only when slab tax exceeds minimum
+
+    document.getElementById('rebate-row').style.display        = investUseful ? '' : 'none';
+    document.getElementById('rebate-income-row').style.display = investUseful ? '' : 'none';
+
+    if(annual <= 0){
+      document.getElementById('v-invest').textContent  = bdt(0);
+      document.getElementById('investMsg').textContent = 'আয়ের তথ্য দিলে এখানে আপনার বিনিয়োগ লক্ষ্য দেখা যাবে।';
+    } else if(!investUseful){
+      document.getElementById('v-invest').textContent = 'প্রযোজ্য নয়';
+      document.getElementById('investMsg').innerHTML  =
+        'বিনিয়োগ করলেও প্রদেয় কর কমবে না — <strong>বিনিয়োগের প্রয়োজন নেই।</strong>';
+    } else if(minApplied){
+      document.getElementById('v-invest').textContent = bdt(usefulInvest);
+      // investMsg will be set in the analysis block below
+    } else {
+      document.getElementById('v-invest').textContent = bdt(usefulInvest);
+      // investMsg will be set in the analysis block below
+    }
+
+    document.getElementById('v-nettax-row').textContent = bdt(finalTax);
+    document.getElementById('v-tds-row').textContent    = '− '+bdt(tds);
+
+    // Balance after TDS
+    const balance = finalTax - tds;
+    const isRefund = balance < 0;
+    const labelEl  = document.getElementById('finalTaxLabel');
+    const amountEl = document.getElementById('v-nettax');
+
+    labelEl.textContent  = isRefund
+      ? 'ফেরতযোগ্য কর (Tax Refund)'
+      : 'রিটার্নে পরিশোধযোগ্য কর · Tax to Pay';
+    amountEl.textContent = bdt(Math.abs(balance));
+    amountEl.style.color = isRefund ? '#7ee8a2' : '#f7d489';
+
+    // Tax message
+    if(annual <= 0){
+      document.getElementById('taxMsg').textContent='আয়ের তথ্য দিলে প্রদেয় কর এখানে দেখাবে।';
+    } else if(grossTax === 0 && !isNew){
+      document.getElementById('taxMsg').innerHTML='করযোগ্য আয় করমুক্ত সীমার মধ্যে। <strong>কোনো কর দিতে হবে না।</strong>';
+    } else if(grossTax === 0 && isNew){
+      document.getElementById('taxMsg').innerHTML='করযোগ্য আয় করমুক্ত সীমার মধ্যে, তবে নতুন করদাতা হওয়ায় <strong>নূন্যতম কর ৳১,০০০</strong> প্রদেয়।';
+    } else if(isRefund){
+      document.getElementById('taxMsg').innerHTML=
+        'প্রদেয় কর <strong>'+bdt(finalTax)+'</strong> এর বিপরীতে TDS কাটা হয়েছে <strong>'+bdt(tds)+'</strong>। রিটার্নে <strong>'+bdt(Math.abs(balance))+'</strong> ফেরত পাবেন।';
+    } else if(grossTax > 0 && grossTax <= 5000){
+      document.getElementById('taxMsg').innerHTML=
+        'মোট কর ৳'+num(grossTax)+' হলেও নূন্যতম কর <strong>৳ ৫,০০০</strong> প্রযোজ্য। TDS বাদে <strong>'+bdt(balance)+'</strong> পরিশোধ করতে হবে।';
+    } else if(minApplied){
+      document.getElementById('taxMsg').innerHTML=
+        'মোট কর <strong>'+bdt(grossTax)+'</strong> — রিবেট বাদে সর্বোচ্চ ৳৫,০০০ পর্যন্ত কমানো সম্ভব। TDS বাদে <strong>'+bdt(balance)+'</strong> পরিশোধ করতে হবে।';
+    } else {
+      document.getElementById('taxMsg').innerHTML=
+        'মোট কর <strong>'+bdt(grossTax)+'</strong> থেকে রিবেট ও TDS বাদে <strong>'+bdt(balance)+'</strong> পরিশোধ করতে হবে।';
+    }
+
+    // Monthly TDS: tax on (salary + festival bonus only) / 12
+    const festivalRaw = parseFloat(bonusFields.festival.input.value)||0;
+    const tdsBase     = salaryTotal + festivalRaw;
+    const tdsDeduct   = Math.min(tdsBase / 3, 500000);
+    const tdsTaxable  = tdsBase - tdsDeduct;
+    const { total: tdsGross } = slabTax(tdsTaxable, exemptionLimit);
+    let tdsFinal = 0;
+    if(tdsGross > 5000){
+      tdsFinal = Math.max(tdsGross - Math.round(tdsTaxable * 0.03), 5000);
+    } else if(tdsGross > 0){
+      tdsFinal = 5000;
+    } else if(isNew){
+      tdsFinal = 1000;
+    }
+    const monthlyTDS = Math.round(tdsFinal / 12);
+
+    // Existing investment analysis
+    const totalAllowableInvest = computeEffectiveAllowable(existingInvestments);
+    const existRebate   = Math.min(Math.round(totalAllowableInvest * 0.15), appliedRebate);
+    const remainInvest  = (investUseful && totalAllowableInvest > 0)
+      ? Math.max(Math.round((appliedRebate - existRebate) / 0.15), 0) : 0;
+
+    if(investUseful && totalAllowableInvest > 0){
+      document.getElementById('investAnalysis').style.display = 'block';
+      document.getElementById('v-exist-invest').textContent  = bdt(totalAllowableInvest);
+      document.getElementById('v-exist-rebate').textContent  = bdt(existRebate);
+      if(remainInvest <= 0){
+        document.getElementById('remaining-row').style.display = 'none';
+        document.getElementById('v-invest-status').textContent = '✓ সর্বোচ্চ রিবেট অর্জিত হয়েছে';
+        // Update green box message
+        document.getElementById('investMsg').innerHTML =
+          '<strong>✓ সর্বোচ্চ রিবেট অর্জিত।</strong> বিদ্যমান বিনিয়োগ <strong>'+bdt(totalAllowableInvest)+'</strong> থেকে <strong>'+bdt(existRebate)+'</strong> রিবেট পাবেন।';
+      } else {
+        document.getElementById('remaining-row').style.display = 'flex';
+        document.getElementById('v-remaining-invest').textContent = bdt(remainInvest);
+        document.getElementById('v-invest-status').textContent = '';
+        // Update green box message to show remaining
+        document.getElementById('investMsg').innerHTML =
+          'বিদ্যমান বিনিয়োগ <strong>'+bdt(totalAllowableInvest)+'</strong>। সর্বোচ্চ রিবেটের জন্য আরও <strong style="color:#f7d489">'+bdt(remainInvest)+'</strong> বিনিয়োগ করুন।';
+      }
+    } else {
+      document.getElementById('investAnalysis').style.display = 'none';
+      // Restore original invest message when no existing investments
+      if(investUseful){
+        if(minApplied){
+          document.getElementById('investMsg').innerHTML =
+            'মোট কর <strong>'+bdt(grossTax)+'</strong> — নূন্যতম কর ৳৫,০০০ পর্যন্ত কমাতে <strong>'+bdt(usefulInvest)+'</strong> বিনিয়োগ করলে <strong>'+bdt(appliedRebate)+'</strong> রিবেট পাবেন।';
+        } else {
+          document.getElementById('investMsg').innerHTML =
+            'সর্বোচ্চ <strong>'+bdt(appliedRebate)+'</strong> রিবেট পেতে আনুমানিক <strong>'+bdt(usefulInvest)+'</strong> বিনিয়োগ করতে হবে।';
         }
+      }
+    }
+
+    // Store results for PDF generation
+    window.pdfData = {
+      annual, taxFree, taxable, maxRebate, reqInvest,
+      appliedRebate, usefulInvest, investUseful,
+      grossTax, finalTax, tds, balance, isRefund, minApplied,
+      slabRows: rows, exemptionLimit, monthlyTDS,
+      existingInvestments: existingInvestments.map(x=>({
+        labelEn:x.opt.labelEn, label:x.opt.label,
+        amount:x.amount, policyValue:x.policyValue,
+        allowable:x.allowable, capped:x.amount>x.allowable
+      })),
+      totalAllowableInvest, existRebate, remainInvest
+    };
+  }
+
+  /* ─── Investment options ─── */
+  const INVEST_OPTS = [
+    {id:'insurance',      label:'জীবন বীমা প্রিমিয়াম',                 labelEn:'Life Insurance Premium',           limit:null,   special:'insurance'},
+    {id:'provident',      label:'স্বীকৃত প্রভিডেন্ট ফান্ড',              labelEn:'Recognized Provident Fund',        limit:null},
+    {id:'superannuation', label:'সুপারঅ্যানুয়েশন ফান্ড',                 labelEn:'Superannuation Fund',              limit:null},
+    {id:'govt_sec',       label:'সরকারি সিকিউরিটিজ',                     labelEn:'Govt. Securities',                 limit:500000},
+    {id:'mutual',         label:'মিউচুয়াল ফান্ড / ইউনিট / ETF',          labelEn:'Mutual Funds / Unit Cert. / ETF', limit:500000},
+    {id:'dps',            label:'ডিপিএস / মাসিক সঞ্চয় স্কিম',            labelEn:'DPS / Monthly Savings Scheme',     limit:120000},
+    {id:'bsec',           label:'BSEC তালিকাভুক্ত সিকিউরিটিজ',           labelEn:'BSEC Listed Securities',           limit:null},
+    {id:'hospital',       label:'দাতব্য হাসপাতালে দান',                  labelEn:'Charitable Hospital Donation',     limit:null},
+    {id:'disabled',       label:'প্রতিবন্ধী কল্যাণ সংস্থায় দান',          labelEn:'Disabled Welfare Donation',        limit:null},
+    {id:'zakat',          label:'যাকাত ফান্ড',                            labelEn:'Zakat Fund',                       limit:null},
+    {id:'benevolent',     label:'বেনেভোলেন্ট ফান্ড / গ্রুপ ইনস্যুরেন্স',  labelEn:'Benevolent Fund & Group Insurance',limit:null},
+    {id:'education',      label:'শিক্ষা/উন্নয়নে প্রতিষ্ঠান',             labelEn:'Education / Dev. Institution',     limit:null},
+    {id:'liberation',     label:'মুক্তিযুদ্ধ জাদুঘর',                    labelEn:'Liberation War Museum',            limit:null},
+  ];
+
+  let existingInvestments = [];
+
+  function calcAllowable(opt, amount, policyValue){
+    if(opt.special==='insurance') return Math.min(amount, (policyValue||0)*0.10);
+    return opt.limit ? Math.min(amount, opt.limit) : amount;
+  }
+
+  // Combined caps: these limits apply to the TOTAL across all entries of that type
+  const COMBINED_CAPS = { dps: 120000 };
+
+  function computeEffectiveAllowable(investments){
+    const groupedAmts = {};
+    let total = 0;
+    investments.forEach(item => {
+      const id = item.opt.id;
+      if(COMBINED_CAPS[id] !== undefined){
+        groupedAmts[id] = (groupedAmts[id]||0) + item.amount;
+      } else {
+        total += item.allowable;
+      }
+    });
+    Object.entries(groupedAmts).forEach(([id, amt]) => {
+      total += Math.min(amt, COMBINED_CAPS[id]);
+    });
+    return total;
+  }
+
+  function renderInvestItems(){
+    const container = document.getElementById('investItems');
+    const fmtI = n=>'৳ '+new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n));
+    if(existingInvestments.length===0){
+      container.innerHTML='<div style="color:var(--muted);font-size:13px;padding:4px 0">কোনো বিনিয়োগ যোগ করা হয়নি।</div>';
+      document.getElementById('investTotalRow').style.display='none';
+    } else {
+      container.innerHTML=existingInvestments.map((item,i)=>{
+        const capped=item.amount>item.allowable;
+        const sub=item.opt.special==='insurance'
+          ?'প্রিমিয়াম: '+fmtI(item.amount)+' | পলিসি মূল্য: '+fmtI(item.policyValue)
+          :'বিনিয়োগ: '+fmtI(item.amount);
+        const capNote=capped?'<div class="inv-cap">⚠ সীমা অতিক্রম — গণনায় '+fmtI(item.allowable)+'</div>':'';
+        return '<div class="invest-item">'+
+          '<div><div class="inv-name">'+item.opt.label+'</div>'+
+          '<div class="inv-sub">'+sub+'</div>'+capNote+'</div>'+
+          '<div style="display:flex;align-items:center;gap:8px">'+
+          '<div class="inv-allowable">'+fmtI(item.amount)+'</div>'+
+          '<button class="inv-del" onclick="removeInvestment('+i+')" title="মুছুন">×</button>'+
+          '</div></div>';
+      }).join('');
+
+      // Combined DPS cap warning
+      const dpsTotal = existingInvestments.filter(x=>x.opt.id==='dps').reduce((s,x)=>s+x.amount, 0);
+      if(dpsTotal > 120000){
+        container.innerHTML += '<div style="color:#b06000;font-size:12px;padding:7px 4px;border-top:1px dashed var(--line);margin-top:2px">'+
+          '⚠ মোট DPS/মাসিক সঞ্চয়: '+fmtI(dpsTotal)+' — একত্রে সর্বোচ্চ সীমা ৳১,২০,০০০। গণনায় ৳১,২০,০০০ প্রযোজ্য হবে।</div>';
+      }
+
+      const total=computeEffectiveAllowable(existingInvestments);
+      document.getElementById('totalAllowable').textContent=fmtI(total);
+      document.getElementById('investTotalRow').style.display='flex';
+    }
+    calculate();
+  }
+
+  window.handleInvestTypeChange=function(){
+    const typeId=document.getElementById('investType').value;
+    const opt=INVEST_OPTS.find(o=>o.id===typeId);
+    const insDiv=document.getElementById('insuranceFields');
+    const stdDiv=document.getElementById('standardInvestField');
+    const addBtn=document.getElementById('addInvestBtn');
+    if(!typeId||!opt){insDiv.style.display='none';stdDiv.style.display='none';addBtn.style.display='none';return;}
+    if(opt.special==='insurance'){insDiv.style.display='grid';stdDiv.style.display='none';}
+    else{
+      insDiv.style.display='none';stdDiv.style.display='block';
+      document.getElementById('investLimitHint').textContent=
+        opt.limit?'(সর্বোচ্চ ৳'+new Intl.NumberFormat('en-IN').format(opt.limit)+')':'(কোনো সীমা নেই)';
+    }
+    addBtn.style.display='block';
+  };
+
+  window.addInvestment=function(){
+    const typeId=document.getElementById('investType').value;
+    if(!typeId){alert('বিনিয়োগের ধরন বেছে নিন।');return;}
+    const opt=INVEST_OPTS.find(o=>o.id===typeId);
+    if(opt.special==='insurance'){
+      const premium=parseFloat(document.getElementById('investPremium').value)||0;
+      const policy=parseFloat(document.getElementById('investPolicy').value)||0;
+      if(premium<=0){alert('মোট প্রিমিয়াম দিন।');return;}
+      if(policy<=0){alert('পলিসি মূল্য দিন।');return;}
+      existingInvestments.push({opt,amount:premium,policyValue:policy,allowable:calcAllowable(opt,premium,policy)});
+      document.getElementById('investPremium').value='';
+      document.getElementById('investPolicy').value='';
+    } else {
+      const amount=parseFloat(document.getElementById('investAmount').value)||0;
+      if(amount<=0){alert('বিনিয়োগের পরিমাণ দিন।');return;}
+      existingInvestments.push({opt,amount,policyValue:0,allowable:calcAllowable(opt,amount,0)});
+      document.getElementById('investAmount').value='';
+    }
+    document.getElementById('investType').value='';
+    document.getElementById('insuranceFields').style.display='none';
+    document.getElementById('standardInvestField').style.display='none';
+    document.getElementById('addInvestBtn').style.display='none';
+    renderInvestItems();
+  };
+
+  window.removeInvestment=function(idx){
+    existingInvestments.splice(idx,1);
+    renderInvestItems();
+  };
+
+  /* ─── Event listeners ─── */
+  monthInputs().forEach(inp=>inp.addEventListener('input',calculate));
+  Object.values(bonusFields).forEach(f=>f.input.addEventListener('input',calculate));
+  document.getElementById('category').addEventListener('change',calculate);
+  document.getElementById('disabledKids').addEventListener('input',calculate);
+  document.getElementById('newTaxpayer').addEventListener('change',calculate);
+
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    if(!confirm('সব তথ্য মুছে দিতে চান?\nএই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।')) return;
+    monthInputs().forEach(inp=>{inp.value='';inp.classList.remove('invalid');});
+    Object.values(bonusFields).forEach(f=>{f.input.value='';setErr(f,false);});
+    document.getElementById('disabledKids').value='';
+    document.getElementById('taxpayerName').value='';
+    document.getElementById('newTaxpayer').checked=false;
+    document.getElementById('category').value='375000';
+    document.getElementById('v-nettax').style.color='#f7d489';
+    existingInvestments=[];
+    renderInvestItems();
+    document.getElementById('investType').value='';
+    document.getElementById('insuranceFields').style.display='none';
+    document.getElementById('standardInvestField').style.display='none';
+    document.getElementById('addInvestBtn').style.display='none';
+    calculate();
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      alert('PDF লাইব্রেরি লোড হয়নি। পেজ রিফ্রেশ করুন।'); return;
+    }
+    const r = window.pdfData;
+    if (!r || !r.annual) {
+      alert('আগে আয়ের তথ্য দিন, তারপর PDF ডাউনলোড করুন।'); return;
+    }
+
+    const btn = document.getElementById('printBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg style="width:18px;height:18px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> তৈরি হচ্ছে...';
+
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const W = doc.internal.pageSize.getWidth();
+      const M = 16;
+      let y = M;
+
+      const fmtN = n => new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n||0));
+      const bdt2 = n => 'BDT ' + fmtN(n);
+      const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+
+      const tpName = (document.getElementById('taxpayerName').value.trim()) || 'Taxpayer';
+      const catVal = document.getElementById('category').value;
+      const catMapEng = {
+        '375000': 'General Male (Limit: BDT 3,75,000)',
+        '425000': 'Female / 65+ Years (Limit: BDT 4,25,000)',
+        '500000': 'Third Gender / Disabled (Limit: BDT 5,00,000)',
+        '525000': 'Freedom Fighter / July Warrior (Limit: BDT 5,25,000)'
+      };
+      const catText = catMapEng[catVal] || 'General Male';
+      const isNew  = document.getElementById('newTaxpayer').checked;
+      const kids   = parseInt(document.getElementById('disabledKids').value)||0;
+
+      const getTaxMsg = () => {
+        if (r.isRefund) return 'TDS '+bdt2(r.tds)+' exceeds tax '+bdt2(r.finalTax)+'. Refund: '+bdt2(Math.abs(r.balance));
+        if (r.grossTax === 0 && isNew)  return 'Income within tax-free limit. Min. tax BDT 1,000 applies (new taxpayer).';
+        if (r.grossTax === 0)           return 'Income within tax-free limit. No tax payable.';
+        if (r.grossTax > 0 && r.grossTax <= 5000) return 'Gross tax BDT '+fmtN(r.grossTax)+'. Minimum tax of BDT 5,000 applies.';
+        if (r.minApplied) return 'Tax reducible to min. BDT 5,000 via investment rebate. After TDS: '+bdt2(r.balance)+' to pay.';
+        return 'Gross tax '+bdt2(r.grossTax)+' minus rebate & TDS: '+bdt2(r.balance)+' payable.';
+      };
+
+      // ── HEADER ──────────────────────────
+      doc.setFillColor(255,255,255);
+      doc.rect(0, 0, W, 36, 'F');
+      doc.setDrawColor(11,61,46); doc.setLineWidth(1.2);
+      doc.line(0, 36, W, 36);
+      doc.setLineWidth(0.2);
+
+      // Left: Taxpayer name + subtitle
+      doc.setFontSize(15); doc.setFont('helvetica','bold');
+      doc.setTextColor(11,61,46);
+      doc.text(tpName, M, 14);
+
+      doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+      doc.setTextColor(91,110,100);
+      doc.text('Income Tax Calculation  |  AY 2026-27 & 2027-28', M, 24);
+
+      // Right: "Income Tax Calculator" large, then developed by + LinkedIn icon + date
+      doc.setFontSize(12); doc.setFont('helvetica','bold');
+      doc.setTextColor(11,61,46);
+      doc.text('Income Tax Calculator', W-M, 12, {align:'right'});
+
+      doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+      doc.setTextColor(91,110,100);
+      const devByLine = 'Developed by: Md. Nur Uddin Mahmud';
+      doc.text(devByLine, W-M, 20, {align:'right'});
+      // LinkedIn icon placed to the left of "Developed by" text
+      const liHSz = 3.5;
+      const liHX  = W - M - doc.getTextWidth(devByLine) - liHSz - 2;
+      const liHY  = 17;
+      doc.setFillColor(0,119,181);
+      doc.roundedRect(liHX, liHY, liHSz, liHSz, 0.5, 0.5, 'F');
+      doc.setFontSize(3.2); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+      doc.text('in', liHX+0.6, liHY+liHSz-0.7);
+      doc.link(liHX, liHY, liHSz, liHSz, {url:'https://www.linkedin.com/in/nmahmudcu/'});
+
+      doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+      doc.setTextColor(91,110,100);
+      doc.text('Date: '+today, W-M, 27, {align:'right'});
+
+      y = 44;
+
+      // ── helpers ──────────────────────────
+      const secTitle = (t) => {
+        doc.setFontSize(7.5); doc.setFont('helvetica','bold');
+        doc.setTextColor(11,61,46);
+        doc.text(t, M, y);
+        doc.setDrawColor(11,61,46); doc.setLineWidth(0.4);
+        doc.line(M, y+1.5, W-M, y+1.5);
+        doc.setLineWidth(0.2); doc.setTextColor(28,36,32);
+        y += 7;
+      };
+
+      const rowPDF = (label, value, bold) => {
+        doc.setFontSize(9.5);
+        doc.setFont('helvetica', bold ? 'bold' : 'normal');
+        doc.setTextColor(bold ? 28 : 80, bold ? 36 : 90, bold ? 32 : 85);
+        doc.text(label, M, y);
+        doc.setFont('helvetica','bold'); doc.setTextColor(28,36,32);
+        doc.text(value, W-M, y, {align:'right'});
+        doc.setDrawColor(220,225,222); doc.setLineWidth(0.15);
+        doc.line(M, y+1.5, W-M, y+1.5);
+        doc.setLineWidth(0.2);
+        y += 7;
+      };
+
+      // ── TAXPAYER INFO ────────────────────
+      secTitle('TAXPAYER INFORMATION');
+      rowPDF('Name', tpName);
+      rowPDF('Category', catText);
+      if(kids>0) rowPDF('Disabled Children / Wards', kids+' person(s)');
+      if(isNew)  rowPDF('New Taxpayer', 'Yes');
+      y += 4;
+
+      // ── MONTHLY SALARY ───────────────────
+      const MONTHS_EN = ['July','August','September','October','November','December','January','February','March','April','May','June'];
+      const KEYS_EN   = ['jul','aug','sep','oct','nov','dec','jan','feb','mar','apr','may','jun'];
+      const salaryData = [];
+      KEYS_EN.forEach((k,i)=>{
+        const v = parseFloat(document.getElementById('m-'+k).value)||0;
+        if(v>0) salaryData.push([MONTHS_EN[i], bdt2(v)]);
       });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => observer.observe(el));
-  </script>
+      if(salaryData.length>0){
+        secTitle('MONTHLY SALARY (July – June)');
+        doc.autoTable({
+          body: salaryData, startY: y, margin:{left:M,right:M},
+          theme:'plain',
+          styles:{fontSize:9, textColor:[40,52,46], lineColor:[220,225,222], lineWidth:0.15},
+          columnStyles:{0:{cellWidth:90}, 1:{halign:'right',fontStyle:'bold'}},
+        });
+        y = doc.lastAutoTable.finalY + 5;
+      }
+
+      // ── BONUSES ──────────────────────────
+      const festival = parseFloat(document.getElementById('festival').value)||0;
+      const other    = parseFloat(document.getElementById('other').value)||0;
+      const tdsVal   = parseFloat(document.getElementById('tds').value)||0;
+      if(festival>0 || other>0){
+        secTitle('BONUS & ADDITIONAL INCOME');
+        if(festival>0) rowPDF('Festival Bonus', bdt2(festival));
+        if(other>0)    rowPDF('Other Bonus / Income', bdt2(other));
+        y += 4;
+      }
+
+      // ── INCOME & REBATE ───────────────────
+      secTitle('INCOME & INVESTMENT REBATE');
+      rowPDF('Annual Income', bdt2(r.annual));
+      rowPDF('Tax-Free Amount', bdt2(r.taxFree));
+      rowPDF('Taxable Income', bdt2(r.taxable));
+      if(r.investUseful){
+        rowPDF('Maximum Rebate', bdt2(r.appliedRebate));
+        rowPDF('Required Investment', bdt2(r.usefulInvest), true);
+      } else {
+        rowPDF('Required Investment', 'Not Applicable — Min. Tax Applies', true);
+      }
+      y += 4;
+
+      // ── EXISTING INVESTMENTS ──────────────────
+      if(r.existingInvestments && r.existingInvestments.length > 0){
+        if(y > 200) { doc.addPage(); y = 16; }
+        secTitle('EXISTING INVESTMENTS');
+        doc.autoTable({
+          head:[['Investment Type','Invested','Allowable']],
+          body: r.existingInvestments.map(x=>[
+            x.labelEn+(x.policyValue>0?' (Policy: '+bdt2(x.policyValue)+')':''),
+            bdt2(x.amount),
+            bdt2(x.allowable)+(x.capped?' *':'')
+          ]),
+          startY:y, margin:{left:M,right:M},
+          theme:'plain',
+          headStyles:{fontStyle:'bold',fontSize:8,textColor:[11,61,46],lineWidth:{bottom:0.4},lineColor:[11,61,46]},
+          bodyStyles:{fontSize:8.5,textColor:[40,52,46],lineColor:[220,225,222],lineWidth:0.15},
+          columnStyles:{0:{cellWidth:100},1:{halign:'right'},2:{halign:'right',fontStyle:'bold'}},
+          didDrawPage: function(data){ y = data.cursor.y; }
+        });
+        y = doc.lastAutoTable.finalY + 3;
+
+        if(r.existingInvestments.some(x=>x.capped)){
+          if(y > 265) { doc.addPage(); y = 16; }
+          doc.setFontSize(7.5); doc.setFont('helvetica','italic'); doc.setTextColor(180,100,0);
+          doc.text('* Amount capped at statutory allowable limit for this investment type.', M, y);
+          y += 5;
+        }
+        // DPS combined cap note
+        const dpsTotalAmt = r.existingInvestments.filter(x=>x.labelEn.includes('DPS')).reduce((s,x)=>s+x.amount,0);
+        if(dpsTotalAmt > 120000){
+          if(y > 265) { doc.addPage(); y = 16; }
+          doc.setFontSize(7.5); doc.setFont('helvetica','italic'); doc.setTextColor(180,100,0);
+          doc.text('Note: Combined DPS/Monthly Savings total BDT '+fmtN(dpsTotalAmt)+'. Combined cap of BDT 1,20,000 applied.', M, y);
+          y += 5;
+        }
+        if(y > 258) { doc.addPage(); y = 16; }
+        rowPDF('Total Allowable Investment', bdt2(r.totalAllowableInvest));
+        if(y > 258) { doc.addPage(); y = 16; }
+        rowPDF('Rebate from Existing Investments (x 15%)', bdt2(r.existRebate));
+        if(r.remainInvest > 0){
+          if(y > 258) { doc.addPage(); y = 16; }
+          rowPDF('Additional Investment Still Needed', bdt2(r.remainInvest), true);
+        } else {
+          if(y > 258) { doc.addPage(); y = 16; }
+          doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(11,61,46);
+          doc.setFillColor(230,245,235); doc.rect(M, y-4, W-M*2, 8, 'F');
+          doc.text('Full rebate achieved. No further investment needed.', M+3, y+0.5);
+          y += 8;
+        }
+        y += 3;
+      }
+
+      // ── TAX SLAB ─────────────────────────
+      secTitle('TAX SLAB CALCULATION');
+      const engLabels = [
+        'Tax-Free (First BDT '+fmtN(r.exemptionLimit)+')',
+        'Next BDT 3,00,000',
+        'Next BDT 4,00,000',
+        'Next BDT 5,00,000',
+        'Next BDT 20,00,000',
+        'Remaining'
+      ];
+      doc.autoTable({
+        head:[['Income Band','Taxable Amount','Rate','Tax']],
+        body:(r.slabRows||[]).map((s,i)=>[
+          engLabels[i]||'Band', bdt2(s.inBand), (s.rate*100)+'%', bdt2(s.tax)
+        ]),
+        startY:y, margin:{left:M,right:M},
+        theme:'plain',
+        headStyles:{fontStyle:'bold',fontSize:8,textColor:[11,61,46],lineWidth:{bottom:0.4},lineColor:[11,61,46]},
+        bodyStyles:{fontSize:9,textColor:[40,52,46],lineColor:[220,225,222],lineWidth:0.15},
+        columnStyles:{1:{halign:'right'},2:{halign:'right',cellWidth:14},3:{halign:'right',fontStyle:'bold'}},
+      });
+      y = doc.lastAutoTable.finalY + 5;
+
+      // ── TAX SUMMARY ──────────────────────
+      secTitle('TAX SUMMARY');
+      rowPDF('Gross Tax (From Slabs)', bdt2(r.grossTax));
+      if(r.investUseful) rowPDF('Investment Rebate (15%)', '- '+bdt2(r.appliedRebate));
+      rowPDF('Net Tax Payable', bdt2(r.finalTax), true);
+      if(tdsVal>0) rowPDF('TDS Deducted at Source', '- '+bdt2(tdsVal));
+      y += 5;
+
+      // ── FINAL BOX (split: left = Tax To Pay, right = Monthly TDS) ─
+      if(y > 238) { doc.addPage(); y = 16; }
+      const finalLbl = r.isRefund ? 'TAX REFUND' : 'TAX TO PAY (IN RETURN)';
+      const boxW = W - M*2;
+      const boxH = 24;
+      const splitX = M + boxW * 0.56;
+
+      // Box outline
+      doc.setDrawColor(11,61,46); doc.setLineWidth(0.6);
+      doc.rect(M, y, boxW, boxH, 'S');
+      // Left accent bar
+      doc.setFillColor(11,61,46); doc.rect(M, y, 3, boxH, 'F');
+      // Vertical separator
+      doc.setDrawColor(200,215,205); doc.setLineWidth(0.4);
+      doc.line(splitX, y+3, splitX, y+boxH-3);
+      doc.setLineWidth(0.2);
+
+      // ── Left: Tax To Pay ──
+      doc.setFontSize(7); doc.setFont('helvetica','bold');
+      doc.setTextColor(91,110,100);
+      doc.text(finalLbl, M+6, y+8);
+      doc.setFontSize(15); doc.setFont('helvetica','bold');
+      doc.setTextColor(11,61,46);
+      doc.text(bdt2(Math.abs(r.balance||0)), M+6, y+18);
+      const msgTxt = getTaxMsg();
+      const msgLines = doc.splitTextToSize(msgTxt, splitX - M - 10);
+      doc.setFontSize(7); doc.setFont('helvetica','normal');
+      doc.setTextColor(91,110,100);
+      if(msgLines[0]) doc.text(msgLines[0], M+6, y+23);
+
+      // ── Right: Monthly TDS ──
+      const rx = splitX + 5;
+      doc.setFontSize(7); doc.setFont('helvetica','bold');
+      doc.setTextColor(91,110,100);
+      doc.text('MONTHLY TDS', rx, y+8);
+      doc.setFontSize(15); doc.setFont('helvetica','bold');
+      doc.setTextColor(11,61,46);
+      doc.text(bdt2(r.monthlyTDS||0), rx, y+18);
+      doc.setFontSize(7); doc.setFont('helvetica','normal');
+      doc.setTextColor(91,110,100);
+      doc.text('Deduct from salary each month', rx, y+23);
+
+      y += boxH + 8;
+
+      // ── INVESTMENT OPTIONS ────────────────
+      if(y > 215) { doc.addPage(); y = 16; }
+      secTitle('ALLOWABLE INVESTMENT OPTIONS (Tax Rebate @ 15%)');
+      doc.autoTable({
+        head:[['Investment / Donation Details','Allowable Limit']],
+        body:[
+          ['Life insurance premium paid by the individual','10% of policy value'],
+          ['Recognized provident fund (employer + employee contribution)','No limit'],
+          ['Superannuation fund contribution','No limit'],
+          ['Govt. securities: T-bill, Bond, Sanchayapatra, Debenture, Shariah securities','BDT 5,00,000'],
+          ['Unit certificates, Mutual funds, ETF or joint investment schemes','BDT 5,00,000'],
+          ['Deposit Pension Scheme (DPS) or Monthly Savings Scheme','BDT 1,20,000'],
+          ['BSEC regulated stock exchange listed securities','No limit'],
+          ['NBR approved charitable hospital (outside city corporation area)','No limit'],
+          ['Organizations established for welfare of disabled persons','No limit'],
+          ['Payment to Zakat Fund / Zakat Fund Management Act, 2023','No limit'],
+          ['NBR approved benevolent fund and group insurance schemes','No limit'],
+          ['Board approved institution for public development or education','No limit'],
+          ['Liberation War Museum donation','No limit'],
+        ],
+        startY:y, margin:{left:M,right:M},
+        theme:'plain',
+        headStyles:{fontStyle:'bold',fontSize:8,textColor:[11,61,46],lineWidth:{bottom:0.4},lineColor:[11,61,46]},
+        bodyStyles:{fontSize:8.5,textColor:[40,52,46],lineColor:[220,225,222],lineWidth:0.15},
+        columnStyles:{0:{cellWidth:130},1:{halign:'right',fontStyle:'bold',textColor:[11,61,46]}},
+      });
+      y = doc.lastAutoTable.finalY + 8;
+
+      // ── ADVISORY ─────────────────────────
+      if(y > 265) { doc.addPage(); y = 16; }
+      const advTxt = 'For accurate income tax return filing, please consult an experienced Income Tax Practitioner. Incorrect returns may result in penalties and legal complications.';
+      const advLines = doc.splitTextToSize(advTxt, W-M*2-8);
+      doc.setFillColor(11,61,46); doc.rect(M, y, 2.5, advLines.length*4.5+10, 'F');
+      doc.setFontSize(8.5); doc.setFont('helvetica','bold');
+      doc.setTextColor(11,61,46);
+      doc.text('For Accurate Tax Return — Contact Us', M+5, y+7);
+      doc.setFontSize(8); doc.setFont('helvetica','normal');
+      doc.setTextColor(80,95,85);
+      doc.text(advLines, M+5, y+13);
+      y += advLines.length*4.5+14;
+
+      // ── FOOTER ───────────────────────────
+      doc.setDrawColor(200,210,204); doc.setLineWidth(0.3);
+      doc.line(M, y, W-M, y); y += 5;
+
+      // Name + title row
+      doc.setFontSize(8.5); doc.setFont('helvetica','bold');
+      doc.setTextColor(11,61,46);
+      doc.text('Md. Nur Uddin Mahmud', M, y);
+      const nameW = doc.getTextWidth('Md. Nur Uddin Mahmud');
+      doc.setFont('helvetica','normal'); doc.setTextColor(107,122,113);
+      doc.text('   |   Income Tax Practitioner  ·  BBA & MBA, University of Chittagong', M + nameW, y);
+      // WhatsApp clickable link
+      doc.setFont('helvetica','bold'); doc.setTextColor(11,61,46);
+      const waNum2   = '01521222707';
+      const waLabel2 = 'WhatsApp: ';
+      const waNumW2  = doc.getTextWidth(waNum2);
+      const waLW2    = doc.getTextWidth(waLabel2);
+      const waX2     = W - M - waNumW2 - waLW2;
+      doc.text(waLabel2, waX2, y);
+      doc.setTextColor(0,102,68); doc.textWithLink(waNum2, waX2+waLW2, y, {url:'https://wa.me/8801521222707'});
+      doc.setDrawColor(0,102,68); doc.setLineWidth(0.25);
+      doc.line(waX2+waLW2, y+0.8, waX2+waLW2+waNumW2, y+0.8);
+      doc.setLineWidth(0.2);
+
+      doc.save('income-tax-'+tpName.replace(/\s+/g,'-')+'.pdf');
+
+    } catch(e) {
+      alert('PDF তৈরিতে সমস্যা: '+e.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF ডাউনলোড করুন';
+    }
+  });
+
+  // ── Spin animation ──
+  const spinStyle = document.createElement('style');
+  spinStyle.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(spinStyle);
+
+  calculate();
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>
